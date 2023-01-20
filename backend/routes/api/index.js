@@ -1,15 +1,21 @@
 const router = require('express').Router();
 
+const sessionRouter = require('./session.js');
+const usersRouter = require('./users.js');
 // PHASE 3 - IMPORT RESTORE
 // GET /api/restore-user
 const { restoreUser } = require('../../utils/auth.js');
 
 router.use(restoreUser);
 
-// // PHASE 1 - TEST API ROUTER
-// router.post('/test', function(req, res) {
-//     res.json({ requestBody: req.body });
-//   });
+router.use('/session', sessionRouter);
+
+router.use('/users', usersRouter);
+
+// PHASE 1 - TEST API ROUTER
+router.post('/test', function(req, res) {
+    res.json({ requestBody: req.body });
+  });
 
 // // PHASE 3 - TEST AUTH
 // // GET /api/set-token-cookie
