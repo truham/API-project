@@ -22,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
     },
     preview: {
-      type: DataTypes.STRING
+      type: DataTypes.BOOLEAN
     }
   }, {
     sequelize,
