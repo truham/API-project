@@ -11,7 +11,7 @@ module.exports = {
   },
   production: {
     use_env_variable: 'DATABASE_URL',
-    dialect: 'postgres',
+    dialect: 'postgres', // remotely we are using postgres; might have bugs remotely despite locally functioning--good to check
     seederStorage: 'sequelize',
     dialectOptions: {
       ssl: {

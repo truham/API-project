@@ -55,6 +55,8 @@ app.use(routes); // Connect all the routes
 
 // PHASE 2 - ERROR HANDLERS
 // catch unhandled reqs and forward to error handler
+// any time there is no route provided for example
+// underscores below are never used; just stylistic choice
 app.use((_req, _res, next) => {
   const err = new Error("The requested resource couldn't be found.");
   err.title = "Resource Not Found";
@@ -76,7 +78,7 @@ app.use((err, _req, _res, next) => {
 // Error formatter - actually sends response back to client
 app.use((err, _req, res, _next) => {
   res.status(err.status || 500);
-  console.error(err);
+  console.error(err); // also to ourselves in terminal to see what error we're running into
   res.json({
     title: err.title || 'Server Error',
     message: err.message,
