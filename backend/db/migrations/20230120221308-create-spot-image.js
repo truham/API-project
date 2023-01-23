@@ -1,21 +1,30 @@
 'use strict';
+
+let options = {};
+if (process.env.NODE_ENV === 'production') {
+  options.schema = process.env.SCHEMA;
+}
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('ReviewImages', {
+    await queryInterface.createTable('SpotImages', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      reviewId: {
+      spotId: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'Reviews'
+          model: 'Spots'
         }
       },
       url: {
+        type: Sequelize.STRING
+      },
+      preview: {
         type: Sequelize.STRING
       },
       createdAt: {
@@ -28,9 +37,11 @@ module.exports = {
         type: Sequelize.DATE,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       }
-    });
+    }, options);
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('ReviewImages');
+    // await queryInterface.dropTable('SpotImages');
+    options.tableName = "SpotImages";
+    return queryInterface.dropTable(options);
   }
 };

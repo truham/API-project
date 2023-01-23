@@ -1,8 +1,14 @@
 'use strict';
+
+let options = {};
+if (process.env.NODE_ENV === 'production') {
+  options.schema = process.env.SCHEMA;
+}
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Reviews', {
+    await queryInterface.createTable('Bookings', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -21,11 +27,11 @@ module.exports = {
           model: 'Users'
         }
       },
-      review: {
-        type: Sequelize.STRING
+      startDate: {
+        type: Sequelize.DATE
       },
-      stars: {
-        type: Sequelize.INTEGER
+      endDate: {
+        type: Sequelize.DATE
       },
       createdAt: {
         allowNull: false,
@@ -37,9 +43,11 @@ module.exports = {
         type: Sequelize.DATE,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       }
-    });
+    }, options);
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Reviews');
+    // await queryInterface.dropTable('Bookings');
+    options.tableName = "Bookings";
+    return queryInterface.dropTable(options);
   }
 };
