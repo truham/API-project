@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
       const { Op } = require('sequelize');
       const user = await User.scope('loginUser').findOne({
         where: {
-          [Op.or]: {
+          [Op.or]: { // allows user to sign in with either username or email
             username: credential,
             email: credential
           }
@@ -46,6 +46,9 @@ module.exports = (sequelize, DataTypes) => {
 
     static associate(models) {
       // define association here
+      User.hasMany(models.Spot, { foreignKey: 'ownerId' })
+      User.hasMany(models.Booking, { foreignKey: 'userId' })
+      User.hasMany(models.Review, { foreignKey: 'userId' })
     }
   };
 

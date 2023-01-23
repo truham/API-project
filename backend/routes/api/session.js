@@ -24,6 +24,7 @@ router.post(
   
       const user = await User.login({ credential, password });
   
+      // it is either no user or pw invalid - vague error msg because don't want to give client any potential clues
       if (!user) {
         const err = new Error('Login failed');
         err.status = 401;
@@ -40,6 +41,7 @@ router.post(
     }
   );
 
+// logs user out
 router.delete(
   '/',
   (_req, res) => {
@@ -48,6 +50,7 @@ router.delete(
   }
 );
 
+// user should stil have token if they've logged in; can verify their token validity via jwt methods
 router.get(
     '/',
     restoreUser,

@@ -24,14 +24,14 @@ const validateSignup = [
       .exists({ checkFalsy: true })
       .isLength({ min: 6 })
       .withMessage('Password must be 6 characters or more.'),
-    handleValidationErrors
+    handleValidationErrors // note this is from the ..utils/validation.js
   ];
 
 router.post(
     '/',
-    validateSignup,
+    validateSignup, // from the above; need to validate registration info first
     async (req, res) => {
-      const { firstName, lastName, email, password, username } = req.body;
+      const { firstName, lastName, email, username, password } = req.body;
       const user = await User.signup({ firstName, lastName, email, username, password });
   
       await setTokenCookie(res, user);
