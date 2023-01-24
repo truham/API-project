@@ -49,6 +49,18 @@ module.exports = {
         name: "Disney World",
         description: "A wonderful resort",
         price: 456,
+      },
+      {
+        ownerId: 3,
+        address: '789 Disney Sea',
+        city: 'Urayasu',
+        state: 'Tokyo',
+        country: 'Japan',
+        lat: 35.6267,
+        lng: 139.8851,
+        name: "Disney Sea",
+        description: "A nautical adventure",
+        price: 456,
       }
     ], {});
   },

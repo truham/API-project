@@ -19,6 +19,11 @@ module.exports = {
         spotId: 2,
         url: 'image url',
         preview: false
+      },
+      {
+        spotId: 3,
+        url: 'image url',
+        preview: true
       }
     ], {});
   },
