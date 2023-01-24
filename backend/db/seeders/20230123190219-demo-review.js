@@ -21,6 +21,12 @@ module.exports = {
         userId: 2,
         review: 'Superb location',
         stars: 4.5
+      },
+      {
+        spotId: 3,
+        userId: 3,
+        review: 'Nautical adventure',
+        stars: 4.75
       }
     ], {});
   },
