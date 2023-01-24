@@ -58,7 +58,11 @@ router.get(
       const { user } = req;
       if (user) {
         return res.json({
-          user: user.toSafeObject()
+          user: user.toSafeObject(),
+          // if i remove .toSafeObject(), res.body will show firstName and lastName as desired from API,
+          // not sure what that method does, can't find online or find its def within vscode
+          // firstName: user.firstName,
+          // lastName: user.lastName
         });
       } else return res.json({ user: null });
     }

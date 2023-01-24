@@ -8,6 +8,13 @@ const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 
 const validateSignup = [
+    // added to check user input has firstName & lastName + that it cannot be null (in model)
+    check('firstName')
+      .exists({ checkFalsy: true })
+      .withMessage('Please provide a first name.'),
+    check('lastName')
+      .exists({ checkFalsy: true })
+      .withMessage('Please provide a last name.'),
     check('email')
       .exists({ checkFalsy: true })
       .isEmail()
@@ -30,6 +37,7 @@ const validateSignup = [
 router.post(
     '/',
     validateSignup, // from the above; need to validate registration info first
+    // do they have firstName, lastName, username, email, etc.?
     async (req, res) => {
       const { firstName, lastName, email, username, password } = req.body;
       const user = await User.signup({ firstName, lastName, email, username, password });

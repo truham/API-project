@@ -54,6 +54,22 @@ module.exports = (sequelize, DataTypes) => {
 
   User.init(
     {
+      firstName: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      lastName: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      email: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          len: [3, 256],
+          isEmail: true
+        }
+      },
       username: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -65,20 +81,6 @@ module.exports = (sequelize, DataTypes) => {
             }
           }
         }
-      },
-      email: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-          len: [3, 256],
-          isEmail: true
-        }
-      },
-      firstName: {
-        type: DataTypes.STRING
-      },
-      lastName: {
-        type: DataTypes.STRING
       },
       hashedPassword: {
         type: DataTypes.STRING.BINARY,
@@ -98,7 +100,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       scopes: {
         currentUser: {
-          attributes: { exclude: ["hashedPassword"] }
+          attributes: { exclude: ["hashedPassword", "createdAt", "updatedAt"] }
         },
         loginUser: {
           attributes: {}
