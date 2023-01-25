@@ -54,7 +54,7 @@ router.post('/:spotId/images', requireAuth, async (req, res) => {
     const findSpot = await Spot.findByPk(req.params.spotId)
         
     // err handle, spot must belong to current user
-    if (findSpot.id !== req.user.id){
+    if (findSpot.ownerId !== req.user.id){
         res.status(404)
         return res.json({
             message: "Unauthorized user",
@@ -228,7 +228,7 @@ router.put('/:spotId', requireAuth, validateSpot, async (req, res) => {
     }
 
     // err handle, spot must belong to current user
-    if (findSpot.id !== req.user.id){
+    if (findSpot.ownerId !== req.user.id){
         res.status(404)
         return res.json({
             message: "Unauthorized user",
@@ -276,6 +276,41 @@ router.post('/', requireAuth, validateSpot, async (req, res) => {
     })
 
     return res.json(newSpot)
+})
+
+
+
+// DELETE A SPOT
+// DELETE /api/spots/:spotId
+// note, needed to include on delete cascade to appropriate associations otherwise run into foreign key constraint error in postman
+router.delete('/:spotId', requireAuth, async (req, res) => {
+    const findSpot = await Spot.findByPk(req.params.spotId)
+
+    // err handle couldn't find spot with the specified id
+    if (!findSpot) {
+        res.status(404)
+        return res.json({
+            message: "Spot couldn't be found",
+            statusCode: 404
+        })
+    }
+
+    // err handle, spot must belong to current user
+    if (findSpot.ownerId !== req.user.id){
+        res.status(404)
+        return res.json({
+            message: "Unauthorized user",
+            statusCode: 404
+        })
+    }
+
+    await findSpot.destroy()
+
+    return res.json({
+        message: "Successfully deleted",
+        statusCode: 200
+    })
+
 })
 
 
