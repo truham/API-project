@@ -4,13 +4,68 @@ const router = express.Router()
 // Spot to find all spots
 // Review to include the avgRating
 // SpotImage to include previewImage? Review has a url: 'image url' too
-const { Spot, Review, SpotImage } = require('../../db/models')
+const { User, Spot, Review, SpotImage } = require('../../db/models')
+const { requireAuth } = require('../../utils/auth')
+
+// GET ALL SPOTS OWNED BY THE CURRENT USER
+// GET /api/spots/current
+router.get('/current', requireAuth, async (req, res) => {
+    const { user } = req // pulls user info from req (we used this in session.js route)
+    const userSpots = await Spot.findAll({ // finding all spots associated with that user.id
+        where: {
+            ownerId: user.id
+        },
+        include: [
+            {
+                model: Review
+            },
+            {
+                model: SpotImage
+            }
+        ]
+    })
+
+    // same code as get all spots, must be a way to refactor, this is repetitive
+    let spotsList = []
+    userSpots.forEach(spot => {
+        spotsList.push(spot.toJSON())
+    })
+
+    spotsList.forEach(spot => {
+        let starsList = []
+        spot.Reviews.forEach(reviews => {
+            starsList.push(reviews.stars)
+        })
+
+        let total = 0
+        for (let star of starsList){ 
+            total += star
+        }
+        let average = total / starsList.length
+        spot.avgRating = average 
+        delete spot.Reviews 
+    })
+
+    spotsList.forEach(spot => {
+        spot.SpotImages.forEach(image => {
+            if (image.preview){ 
+                spot.previewImage = image.url
+            } else {
+                spot.previewImage = 'No preview image available'
+            }
+        })
+        delete spot.SpotImages
+    })
+
+    return res.send({
+        "Spots": spotsList
+    })
+})
 
 
 
-
-
-// GET ALL SPOTS //
+// GET ALL SPOTS
+// GET /api/spots
 router.get('/', async (req, res) => {
     const spots = await Spot.findAll({
     // missing avgRating and previewImage without any added conditions to .findAll({})

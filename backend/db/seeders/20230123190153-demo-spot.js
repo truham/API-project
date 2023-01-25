@@ -39,6 +39,18 @@ module.exports = {
         price: 123,
       },
       {
+        ownerId: 1,
+        address: '321 Disney Lane',
+        city: 'Franciso San',
+        state: 'California',
+        country: 'USA',
+        lat: 37.7645358,
+        lng: -122.4730327,
+        name: "Apps Academy",
+        description: "Test additional spot associated to ownerId",
+        price: 321,
+      },
+      {
         ownerId: 2,
         address: '456 Disney World',
         city: 'Orlando',
