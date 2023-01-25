@@ -7,6 +7,47 @@ const router = express.Router()
 const { User, Spot, Review, SpotImage } = require('../../db/models')
 const { requireAuth } = require('../../utils/auth')
 
+// imported these to handle body validation of new spot
+const { check } = require('express-validator')
+const { handleValidationErrors } = require('../../utils/validation')
+
+// validating new spot
+const validateSpot = [
+    check('address')
+        .exists({ checkFalsy: true })
+        .withMessage('Street address is required'),
+    check('city')
+        .exists({ checkFalsy: true })
+        .withMessage('City is required'),
+    check('state')
+        .exists({ checkFalsy: true })
+        .withMessage('State is required'),
+    check('country')
+        .exists({ checkFalsy: true })
+        .withMessage('Country is required'),
+    check('lat')
+        .exists({ checkFalsy: true })
+        .isNumeric()
+        .withMessage('Latitude is not valid'),
+    check('lng')
+        .exists({ checkFalsy: true })
+        .isNumeric()
+        .withMessage('Longitude is not valid'),
+    check('name')
+        .exists({ checkFalsy: true })
+        .isLength({ max: 50 })
+        .withMessage('Name must be less than 50 characters'),
+    check('description')
+        .exists({ checkFalsy: true })
+        .withMessage('Description is required'),
+    check('price')
+        .exists({ checkFalsy: true })
+        .isNumeric()
+        .withMessage('Price per day is required'),
+    handleValidationErrors
+]
+
+
 // GET ALL SPOTS OWNED BY THE CURRENT USER
 // GET /api/spots/current
 router.get('/current', requireAuth, async (req, res) => {
@@ -107,7 +148,7 @@ router.get('/:spotId', async (req, res) => {
         where: {
             spotId: spotFound.id
         },
-        // raw: true, // including this will convert a boolean to 0s and 1s
+        raw: true, // including this will convert a boolean to 0s and 1s
         // not sure if that's desirable, will ask
         attributes: ['id', 'url', 'preview']
     })
@@ -124,6 +165,24 @@ router.get('/:spotId', async (req, res) => {
     spotFound.Owner = owner
 
     res.json(spotFound)
+})
+
+
+
+// CREATE A SPOT
+// POST /api/spots
+router.post('/', requireAuth, validateSpot, async (req, res) => {
+    // reference spot model to get necessary attributes
+    // should be logged in to create a spot, so userId or ownerId already referenced
+    const { user } = req
+    const { address, city, state, country, lat, lng, name, description, price } = req.body
+
+    const newSpot = await Spot.create({
+        ownerId: user.id,
+        address, city, state, country, lat, lng, name, description, price        
+    })
+
+    if (newSpot) res.json(newSpot)
 })
 
 
