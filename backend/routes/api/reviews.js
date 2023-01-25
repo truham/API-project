@@ -6,6 +6,18 @@ const { requireAuth } = require('../../utils//auth')
 const { check } = require('express-validator')
 const { handleValidationErrors } = require('../../utils/validation')
 
+let validateReview = [
+    check('review')
+        .exists({ checkFalsy: true})
+        .isString()
+        .withMessage('Review text is required'),
+    check('stars')
+        .exists({ checkFalsy: true})
+        .isFloat({ min: 1, max: 5 })
+        .withMessage('Stars must be an integer from 1 to 5'),
+    handleValidationErrors
+]
+
 
 
 // ADD AN IMAGE TO A REVIEW BASED ON THE REVIEW'S ID
@@ -121,6 +133,71 @@ router.get('/current', requireAuth, async (req, res) => {
     })
 })
 
+
+
+// EDIT A REVIEW
+// PUT /api/reviews/:reviewId
+router.put('/:reviewId', requireAuth, validateReview, async (req, res) => {
+    const findReview = await Review.findByPk(req.params.reviewId)
+
+    // error handle for non existing review
+    if (!findReview){
+        res.status(404)
+        return res.json({
+            message: "Review couldn't be found",
+            statusCode: 404
+        })
+    }
+
+    // error handle for must belong to current user
+    if (findReview.userId !== req.user.id){
+        res.status(404)
+        return res.json({
+            message: "Unauthorized user",
+            statusCode: 404
+        })
+    }
+
+    const { review, stars } = req.body
+    if (review) findReview.review = review
+    if (stars) findReview.stars = stars
+    await findReview.save()
+
+    return res.json(findReview)
+})
+
+
+
+// DELETE A REVIEW
+// DELETE /api/reviews/:reviewId
+router.delete('/:reviewId', requireAuth, async (req, res) => {
+    const findReview = await Review.findByPk(req.params.reviewId)
+
+    // error handle for non existing review
+    if (!findReview){
+        res.status(404)
+        return res.json({
+            message: "Review couldn't be found",
+            statusCode: 404
+        })
+    }
+
+    // error handle for must belong to current user
+    if (findReview.userId !== req.user.id){
+        res.status(404)
+        return res.json({
+            message: "Unauthorized user",
+            statusCode: 404
+        })
+    }
+
+    await findReview.destroy()
+
+    return res.json({
+        message: "Successfully deleted",
+        statusCode: 200
+    })
+})
 
 
 module.exports = router
