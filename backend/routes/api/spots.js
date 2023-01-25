@@ -48,6 +48,47 @@ const validateSpot = [
 ]
 
 
+// CREATE AND RETURN A NEW IMAGE FOR A SPOT SPECIFIED BY ID
+// POST /api/spots/:spotId/images
+router.post('/:spotId/images', requireAuth, async (req, res) => {
+    const findSpot = await Spot.findByPk(req.params.spotId)
+        
+    // err handle, spot must belong to current user
+    if (findSpot.id !== req.user.id){
+        res.status(404)
+        return res.json({
+            message: "Unauthorized user",
+            statusCode: 404
+        })
+    }
+
+    // err handle couldn't find spot with the specified id
+    if (!findSpot) {
+        res.status(404)
+        return res.json({
+            message: "Spot couldn't be found",
+            statusCode: 404
+        })
+    }
+
+    // grab info needed to create image
+    const { url, preview } = req.body
+
+    // create spot with provided req.body
+    const newImage = await SpotImage.create({
+        url, preview
+    })
+
+    return res.json({
+        id: newImage.id,
+        url: newImage.url,
+        preview: newImage.preview
+        // excludes createAt and updateAt
+    })
+})
+
+
+
 // GET ALL SPOTS OWNED BY THE CURRENT USER
 // GET /api/spots/current
 router.get('/current', requireAuth, async (req, res) => {
@@ -148,8 +189,11 @@ router.get('/:spotId', async (req, res) => {
         where: {
             spotId: spotFound.id
         },
-        raw: true, // including this will convert a boolean to 0s and 1s
+        // raw: true, // including this will convert a boolean to 0s and 1s
         // not sure if that's desirable, will ask
+        // it doesn't matter, it shows up as 1/0s on sqlite
+        // but postgres will interpret it as true/false anyway
+        // tested on render and render will display true/false while postman shows 1/0 with this on
         attributes: ['id', 'url', 'preview']
     })
     spotFound.SpotImages = spotImages
@@ -169,6 +213,55 @@ router.get('/:spotId', async (req, res) => {
 
 
 
+// EDIT A SPOT
+// PUT /api/spots/:spotId
+router.put('/:spotId', requireAuth, validateSpot, async (req, res) => {
+    const findSpot = await Spot.findByPk(req.params.spotId)
+    
+    // err handle couldn't find spot with the specified id
+    if (!findSpot) {
+        res.status(404)
+        return res.json({
+            message: "Spot couldn't be found",
+            statusCode: 404
+        })
+    }
+
+    // err handle, spot must belong to current user
+    if (findSpot.id !== req.user.id){
+        res.status(404)
+        return res.json({
+            message: "Unauthorized user",
+            statusCode: 404
+        })
+    }
+    
+    // pull data from client
+    const { address, city, state, country, lat, lng, name, description, price } = req.body
+
+    // from wk11d3 content of updating puppies, can set condition then reassign the values
+    // if item is provided, then update; otherwise keep current info
+    if (address) findSpot.address = address
+    if (city) findSpot.city = city
+    if (state) findSpot.state = state
+    if (country) findSpot.country = country
+    if (lat) findSpot.lat = lat
+    if (lng) findSpot.lng = lng
+    if (name) findSpot.name = name
+    if (description) findSpot.description = description
+    if (price) findSpot.price = price 
+    // updates the information in db
+    await findSpot.save() // saves a persisting instance in the database
+
+    // simple update queries per sequelize, potential refactor, can revisit
+    // findSpot.update({ address, city, state, country, lat, lng, name, description, price })
+    // await findSpot.save()
+
+    res.json(findSpot)
+})
+
+
+
 // CREATE A SPOT
 // POST /api/spots
 router.post('/', requireAuth, validateSpot, async (req, res) => {
@@ -182,7 +275,7 @@ router.post('/', requireAuth, validateSpot, async (req, res) => {
         address, city, state, country, lat, lng, name, description, price        
     })
 
-    if (newSpot) res.json(newSpot)
+    return res.json(newSpot)
 })
 
 
