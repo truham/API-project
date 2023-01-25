@@ -64,6 +64,60 @@ router.get('/current', requireAuth, async (req, res) => {
 
 
 
+// GET DETAILS OF A SPOT FROM AN ID
+// GET /api/spots/:spotId
+router.get('/:spotId', async (req, res) => {
+    const spotById = await Spot.findByPk(req.params.spotId)
+    const spotFound = spotById.toJSON()
+
+    const spotReviews = await Review.findAll({
+        where: {
+            spotId: spotFound.id
+        },
+        raw: true
+    })
+
+    // key:value for numReviews
+    spotFound.numReviews = spotReviews.length
+
+    // key:value for avgStarRating
+    let starsList = []
+    for (let reviewStars of spotReviews){
+        starsList.push(reviewStars.stars)
+    }
+    let total = 0
+    for (let star of starsList){
+        total += star
+    }
+    let average = total / starsList.length
+    spotFound.avgStarRating = average
+
+    // key:value for SpotImages
+    const spotImages = await SpotImage.findAll({
+        where: {
+            spotId: spotFound.id
+        },
+        // raw: true, // including this will convert a boolean to 0s and 1s
+        // not sure if that's desirable, will ask
+        attributes: ['id', 'url', 'preview']
+    })
+    spotFound.SpotImages = spotImages
+
+    // key:value for Owner
+    const owner = await User.findOne({
+        where: {
+            id: spotFound.ownerId
+        },
+        raw: true,
+        attributes: ['id', 'firstName', 'lastName']
+    })
+    spotFound.Owner = owner
+
+    res.json(spotFound)
+})
+
+
+
 // GET ALL SPOTS
 // GET /api/spots
 router.get('/', async (req, res) => {
