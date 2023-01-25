@@ -3,6 +3,7 @@ const router = require('express').Router();
 const sessionRouter = require('./session.js');
 const usersRouter = require('./users.js');
 const spotsRouter = require('./spots.js')
+const reviewsRouter = require('./reviews.js')
 
 // PHASE 3 - IMPORT RESTORE
 // GET /api/restore-user
@@ -19,6 +20,7 @@ router.use('/users', usersRouter);
 // also need to export from the spots.js router
 router.use('/spots', spotsRouter)
 
+router.use('/reviews', reviewsRouter)
 
 
 // PHASE 1 - TEST API ROUTER
