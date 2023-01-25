@@ -4,7 +4,7 @@ const router = express.Router()
 // Spot to find all spots
 // Review to include the avgRating
 // SpotImage to include previewImage? Review has a url: 'image url' too
-const { User, Spot, Review, SpotImage } = require('../../db/models')
+const { User, Spot, Review, SpotImage, ReviewImage } = require('../../db/models')
 const { requireAuth } = require('../../utils/auth')
 
 // imported these to handle body validation of new spot
@@ -89,6 +89,46 @@ router.post('/:spotId/images', requireAuth, async (req, res) => {
 
 
 
+// GET ALL REVIEWS BY A SPOT'S ID
+// GET /api/spots/:spotId/reviews
+router.get('/:spotId/reviews', async (req, res) => {
+    const findSpot = await Spot.findByPk(req.params.spotId)
+
+    if (!findSpot){
+        res.status(404)
+        return res.json({
+            message: "Spot couldn't be found",
+            statusCode: 404
+        })
+    }
+
+    const reviews = await Review.findAll({
+        where: {
+            spotId: req.params.spotId
+        },
+        include: [
+            {
+                model: User,
+                attributes: {
+                    exclude: ['email', 'username', 'hashedPassword', 'createdAt', 'updatedAt' ]
+                }
+            },
+            {
+                model: ReviewImage,
+                attributes: {
+                    exclude: ['reviewId', 'createdAt', 'updatedAt']
+                }
+            }
+        ]
+    })
+
+    return res.json({
+        "Reviews": reviews
+    })
+})
+
+
+
 // GET ALL SPOTS OWNED BY THE CURRENT USER
 // GET /api/spots/current
 router.get('/current', requireAuth, async (req, res) => {
@@ -139,7 +179,7 @@ router.get('/current', requireAuth, async (req, res) => {
         delete spot.SpotImages
     })
 
-    return res.send({
+    return res.json({
         "Spots": spotsList
     })
 })
@@ -208,7 +248,7 @@ router.get('/:spotId', async (req, res) => {
     })
     spotFound.Owner = owner
 
-    res.json(spotFound)
+    return res.json(spotFound)
 })
 
 
@@ -257,7 +297,7 @@ router.put('/:spotId', requireAuth, validateSpot, async (req, res) => {
     // findSpot.update({ address, city, state, country, lat, lng, name, description, price })
     // await findSpot.save()
 
-    res.json(findSpot)
+    return res.json(findSpot)
 })
 
 

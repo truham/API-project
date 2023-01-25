@@ -17,10 +17,22 @@ module.exports = {
         stars: 5
       },
       {
+        spotId: 2,
+        userId: 1,
+        review: 'Another fantastic location',
+        stars: 4.8
+      },
+      {
         spotId: 1,
         userId: 2,
         review: 'Superb location',
         stars: 4.5
+      },
+      {
+        spotId: 2,
+        userId: 2,
+        review: 'Another superb location',
+        stars: 4.7
       },
       {
         spotId: 3,
