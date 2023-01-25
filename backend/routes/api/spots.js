@@ -68,6 +68,16 @@ router.get('/current', requireAuth, async (req, res) => {
 // GET /api/spots/:spotId
 router.get('/:spotId', async (req, res) => {
     const spotById = await Spot.findByPk(req.params.spotId)
+
+    // error handling when spot not found with given id
+    if (!spotById){
+        res.status(404)
+        return res.json({
+            message: "Spot couldn't be found",
+            statusCode: 404
+        })
+    }
+
     const spotFound = spotById.toJSON()
 
     const spotReviews = await Review.findAll({
