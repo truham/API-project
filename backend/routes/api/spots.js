@@ -64,7 +64,13 @@ let validateReview = [
 // CREATE A BOOKING FROM A SPOT BASED ON THE SPOT'S ID
 // POST /api/spots/:spotId/bookings
 router.post('/:spotId/bookings', requireAuth, async (req, res) => {
-    const findSpot = await Spot.findByPk(req.params.spotId)
+    const findSpot = await Spot.findByPk(req.params.spotId, {
+        include: {
+            model: Booking
+        }
+    })
+
+    // err handle missing spot
     if (!findSpot){
         res.status(404)
         return res.json({
@@ -73,6 +79,8 @@ router.post('/:spotId/bookings', requireAuth, async (req, res) => {
         })
     }
 
+    // err handle spot must NOT belong to current user
+    // guess they don't book their own spots as an owner?
     if (req.user.id === findSpot.ownerId){
         res.status(404)
         return res.json({
@@ -82,11 +90,95 @@ router.post('/:spotId/bookings', requireAuth, async (req, res) => {
     }
 
     const { startDate, endDate } = req.body
-    const startD = new Date (startDate)
-    console.log(startD.getTime())
-    // come back to this tomorrow
 
-    res.json()
+    // err handle endDate cannot be on or before startDate
+    // need to convert client endDate into new date, then into integer value to compare agianst
+
+    // we get something like 2023-04-01T00:00:00.000Z from client, need to convert to date string
+    // which will give us something like Friday, April 04 2023 instead
+    // then can use that to get the specific time, which is something like 1637308800000
+    // can use that number to compare GT, LT, GTE, LTE, etc
+    let endDateString = new Date(endDate).toDateString()
+    let endDateTime = new Date(endDateString).getTime()
+    let startDateString = new Date(startDate).toDateString()
+    let startDateTime = new Date(startDateString).getTime()
+
+    if (endDateTime <= startDateTime){
+        res.status(400)
+        return res.json({
+            message: "Validation error",
+            statusCode: 400,
+            errors: {
+                endDate: "endDate cannot be on or before startDate"
+            }
+        })
+    }
+
+    let bookingsList = []
+    findSpot.Bookings.forEach(booking => {
+        bookingsList.push(booking.toJSON())
+    })
+
+    // check for conflicts in existing bookings vs client requested booking
+    bookingsList.forEach(booking => {
+        // get existing booking's start and end dates' time to compare against
+        let existingStartDate = new Date(booking.startDate).toDateString()
+        let existingStartTime = new Date(existingStartDate).getTime()
+
+        let existingEndDate = new Date(booking.endDate).toDateString()
+        let existingEndTime = new Date(existingEndDate).getTime()
+
+        // client sends both conflicting startDate and endDate
+        if (startDateTime >= existingStartTime && startDateTime <= existingEndTime &&
+            endDateTime >= existingStartTime && endDateTime <= existingEndTime){
+            res.status(403)
+            return res.json({
+                message: "Sorry, this spot is already booked for the specified dates",
+                statusCode: 403,
+                errors: {
+                    startDate: "Start date conflicts with an existing booking",
+                    endDate: "End date conflicts with an existing booking"
+                }
+            })
+        }
+
+        // establishing a range - seems like there should be a more elegant way to do this
+        if (startDateTime >= existingStartTime && startDateTime <= existingEndTime){
+            res.status(403)
+            return res.json({
+                message: "Sorry, this spot is already booked for the specified dates",
+                statusCode: 403,
+                errors: {
+                    startDate: "Start date conflicts with an existing booking"
+                }
+            })
+        }
+
+        // establishing a range - seems like there should be a more elegant way to do this
+        if (endDateTime >= existingStartTime && endDateTime <= existingEndTime){
+            res.status(403)
+            return res.json({
+                message: "Sorry, this spot is already booked for the specified dates",
+                statusCode: 403,
+                errors: {
+                    endDate: "End date conflicts with an existing booking"
+                }
+            })
+        }
+    })
+
+    // console.log(req.params.spotId) // white 3 in terminal
+    // console.log(Number(req.params.spotId)) // yellow 3 in terminal
+
+    // odd req.params.spotId populates as string
+    const newBooking = await Booking.create({
+        spotId: Number(req.params.spotId),
+        userId: req.user.id,
+        startDate: startDateTime,
+        endDate: endDateTime
+    })
+
+    return res.json(newBooking)
 })
 
 
