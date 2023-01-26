@@ -4,6 +4,7 @@ const sessionRouter = require('./session.js');
 const usersRouter = require('./users.js');
 const spotsRouter = require('./spots.js')
 const reviewsRouter = require('./reviews.js')
+const bookingsRouter = require('./bookings.js')
 
 // PHASE 3 - IMPORT RESTORE
 // GET /api/restore-user
@@ -22,6 +23,7 @@ router.use('/spots', spotsRouter)
 
 router.use('/reviews', reviewsRouter)
 
+router.use('/bookings', bookingsRouter)
 
 // PHASE 1 - TEST API ROUTER
 router.post('/test', function(req, res) {

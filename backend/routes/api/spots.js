@@ -4,7 +4,7 @@ const router = express.Router()
 // Spot to find all spots
 // Review to include the avgRating
 // SpotImage to include previewImage? Review has a url: 'image url' too
-const { User, Spot, Review, SpotImage, ReviewImage } = require('../../db/models')
+const { User, Spot, Review, SpotImage, ReviewImage, Booking } = require('../../db/models')
 const { requireAuth } = require('../../utils/auth')
 
 // imported these to handle body validation of new spot
@@ -58,6 +58,56 @@ let validateReview = [
         .withMessage('Stars must be an integer from 1 to 5'),
     handleValidationErrors
 ]
+
+
+
+// GET ALL BOOKINGS FOR A SPOT BASED ON THE SPOT'S ID
+// GET /api/spots/:spotId/bookings
+router.get('/:spotId/bookings', requireAuth, async (req, res) => {
+    const findSpot = await Spot.findByPk(req.params.spotId)
+    if (!findSpot){
+        res.status(404)
+        return res.json({
+            message: "Spot couldn't be found",
+            statusCode: 404
+        })
+    }
+
+    // if you ARE NOT the owner of the spot
+    if (req.user.id !== findSpot.ownerId){
+        const bookingsNotOwner = await Booking.findAll({
+            where: {
+                spotId: req.params.spotId
+            },
+            attributes: {
+                exclude: ['id', 'userId', 'createdAt', 'updatedAt']
+            }
+        })
+        return res.json({
+            "Bookings": bookingsNotOwner
+        })
+    }
+
+    // if you ARE the owner of the spot
+    if (req.user.id === findSpot.ownerId){
+        const bookingsOwner = await Booking.findAll({
+            where: {
+                spotId: req.params.spotId
+            },
+            include: {
+                model: User,
+                attributes: {
+                    exclude: ['email', 'username', 'hashedPassword', 'createdAt', 'updatedAt' ]
+                }
+            }
+        })
+        res.json({
+            "Bookings": bookingsOwner
+        })
+    }
+})
+
+
 
 // CREATE A REVIEW FOR A SPOT BASED ON THE SPOT'S ID
 // POST /api/spots/:spotId/reviews
