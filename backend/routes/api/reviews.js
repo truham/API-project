@@ -118,6 +118,11 @@ router.get('/current', requireAuth, async (req, res) => {
 
     // handling the inclusion of "previewImage" within the "Spots" object
     reviewsList.forEach(review => {
+        // when delete preview image, then need to assign no previewImage available BEFORE forEaching because no value in array to check after deleted
+        if (!review.Spot.SpotImages.length){
+            review.Spot.previewImage = 'No preview image available'
+        }
+
         review.Spot.SpotImages.forEach(image => {
             if (image.preview){
                 review.Spot.previewImage = image.url
