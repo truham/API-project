@@ -10,6 +10,7 @@ const { requireAuth } = require('../../utils/auth')
 // imported these to handle body validation of new spot
 const { check } = require('express-validator')
 const { handleValidationErrors } = require('../../utils/validation')
+const { Op } = require('sequelize') // import for access to operators
 
 // validating new spot
 const validateSpot = [
@@ -59,7 +60,44 @@ let validateReview = [
     handleValidationErrors
 ]
 
-
+// ADD QUERY FILTERS TO GET ALL SPOTS
+const queryFiltersAllSpots = [
+    check('page')
+        .isInt()
+        .isFloat({ min: 1, max: 10 })
+        .optional()
+        .withMessage('Page must be GTE to 1 and LTE to 10'),
+    check('size')
+        .isInt()
+        .isFloat({ min: 1, max: 20 })
+        .optional()
+        .withMessage('Size must be GTE to 1 and LTE to 20'),
+    check('maxLat')
+        .isDecimal()
+        .optional()
+        .withMessage('Maximum latitude is invalid'),
+    check('minLat')
+        .isDecimal()
+        .optional()
+        .withMessage('Minimum latitude is invalid'),
+    check('maxLng')
+        .isDecimal()
+        .optional()
+        .withMessage('Maximum longitude is invalid'),
+    check('minLng')
+        .isDecimal()
+        .optional()
+        .withMessage('Minimum longitude is invalid'),
+    check('maxPrice')
+        .isFloat({ min: 0 })
+        .optional()
+        .withMessage('Maximum price must be greater than or equal to 0'),
+    check('minPrice')
+        .isFloat({ min: 0 })
+        .optional()
+        .withMessage('Minimum price must be greater than or equal to 0'),
+    handleValidationErrors
+]
 
 // CREATE A BOOKING FROM A SPOT BASED ON THE SPOT'S ID
 // POST /api/spots/:spotId/bookings
@@ -398,6 +436,10 @@ router.get('/current', requireAuth, async (req, res) => {
     })
 
     spotsList.forEach(spot => {
+        if (!spot.SpotImages.length){
+            spot.previewImage = 'No preview image available'
+        }
+
         spot.SpotImages.forEach(image => {
             if (image.preview){ 
                 spot.previewImage = image.url
@@ -582,11 +624,34 @@ router.delete('/:spotId', requireAuth, async (req, res) => {
 
 })
 
-
-
 // GET ALL SPOTS
 // GET /api/spots
-router.get('/', async (req, res) => {
+router.get('/', queryFiltersAllSpots, async (req, res) => {
+    // QUERY PARAMETERS // reference pa wk12 players.js route
+    let { page, size, minLat, maxLat, minLng, maxLng, minPrice, maxPrice } = req.query // e.g. spots?page=2&size=25
+    
+    // if page/size not a number, use default page/size #s
+    page = parseInt(page) // eg 2
+    size = parseInt(size) // eg 25
+
+    // set the default if no values provided
+    // (... || size <= 0 || isNaN(size) // removed bc taken care of in validation
+    // didn't find something for express-validators to set default value if no query provided
+    if (!page) page = 1
+    if (!size) size = 20
+
+    const pagination = {} // eg { limit: 25, offset: 25 }
+    pagination.limit = size
+    pagination.offset = size * (page - 1)
+    
+    const where = {}
+    if (minLat) where.lat = {[Op.gte]: minLat}
+    if (maxLat) where.lat = {[Op.lte]: maxLat}
+    if (minLng) where.lng = {[Op.gte]: minLng}
+    if (maxLng) where.lng = {[Op.lte]: maxLng}
+    if (minPrice) where.price = {[Op.gte]: minPrice}
+    if (maxPrice) where.price = {[Op.lte]: maxPrice}
+
     const spots = await Spot.findAll({
     // missing avgRating and previewImage without any added conditions to .findAll({})
     // below creates a separate object for the review + spotimage attributes, need to merge those attributes together
@@ -597,7 +662,9 @@ router.get('/', async (req, res) => {
             {
                 model: SpotImage
             }
-        ]
+        ],
+        where,
+        ...pagination
         // raw: true // this cleans up the pojo a whole lot to only provide the key attributes
         // without this, we get back an array of Promises that can't be manipulated
     })
@@ -630,6 +697,11 @@ router.get('/', async (req, res) => {
 
     // handling previewImage
     spotsList.forEach(spot => {
+        // if no spot image was found with associated spotId
+        if (!spot.SpotImages.length){
+            spot.previewImage = 'No preview image available'
+        }
+
         spot.SpotImages.forEach(image => {
             if (image.preview){ // check whether t/f for existing spot preview image
                 spot.previewImage = image.url // if found, then assign the previewImage to the image's url
@@ -641,7 +713,9 @@ router.get('/', async (req, res) => {
     })
 
     return res.json({
-        "Spots": spotsList
+        "Spots": spotsList,
+        page,
+        size
     })
 })
 
