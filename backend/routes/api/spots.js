@@ -61,6 +61,36 @@ let validateReview = [
 
 
 
+// CREATE A BOOKING FROM A SPOT BASED ON THE SPOT'S ID
+// POST /api/spots/:spotId/bookings
+router.post('/:spotId/bookings', requireAuth, async (req, res) => {
+    const findSpot = await Spot.findByPk(req.params.spotId)
+    if (!findSpot){
+        res.status(404)
+        return res.json({
+            message: "Spot couldn't be found",
+            statusCode: 404
+        })
+    }
+
+    if (req.user.id === findSpot.ownerId){
+        res.status(404)
+        return res.json({
+            message: "Spot must not belong to the current user",
+            statusCode: 404
+        })
+    }
+
+    const { startDate, endDate } = req.body
+    const startD = new Date (startDate)
+    console.log(startD.getTime())
+    // come back to this tomorrow
+
+    res.json()
+})
+
+
+
 // GET ALL BOOKINGS FOR A SPOT BASED ON THE SPOT'S ID
 // GET /api/spots/:spotId/bookings
 router.get('/:spotId/bookings', requireAuth, async (req, res) => {

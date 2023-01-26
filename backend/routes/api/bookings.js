@@ -7,6 +7,49 @@ const { check } = require('express-validator')
 
 
 
+// DELETE A BOOKING
+// DELETE /api/bookings/:bookingId
+router.delete('/:bookingId', requireAuth, async (req, res) => {
+    const findBooking = await Booking.findByPk(req.params.bookingId)
+    if (!findBooking){
+        res.status(404)
+        return res.json({
+            message: "Booking couldn't be found",
+            statusCode: 404
+        })
+    }
+
+    // err handle, booking must belong to current user
+    if (findBooking.userId !== req.user.id){
+        res.status(404)
+        return res.json({
+            message: "Unauthorized user",
+            statusCode: 404
+        })
+    }
+
+    // bookings that have started can't be deleted
+    let bookingTime = findBooking.startDate.getTime()
+    const currentDateTime = new Date().getTime()
+    if (bookingTime < currentDateTime){
+        res.status(403)
+        return res.json({
+            message: "Bookings that have been started can't be deleted",
+            statusCode: 403
+        })
+    }
+
+    await findBooking.destroy()
+
+    return res.json({
+        message: "Successfully deleted",
+        statusCode: 200
+    })
+
+})
+
+
+
 // GET ALL OF THE CURRENT USER'S BOOKINGS
 // GET /api/bookings/current
 router.get('/current', requireAuth, async (req, res) => {
