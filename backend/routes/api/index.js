@@ -6,6 +6,7 @@ const spotsRouter = require('./spots.js')
 const reviewsRouter = require('./reviews.js')
 const bookingsRouter = require('./bookings.js')
 const spotImagesRouter = require('./spot-images.js')
+const reviewImagesRouter = require('./review-images.js')
 
 // PHASE 3 - IMPORT RESTORE
 // GET /api/restore-user
@@ -14,19 +15,16 @@ const { restoreUser } = require('../../utils/auth.js');
 router.use(restoreUser);
 
 router.use('/session', sessionRouter);
-
 router.use('/users', usersRouter);
 
 // add in the spots route
 // else run into "Resource Not Found" when testing, index needs a reference
 // also need to export from the spots.js router
 router.use('/spots', spotsRouter)
-
 router.use('/reviews', reviewsRouter)
-
 router.use('/bookings', bookingsRouter)
-
 router.use('/spot-images', spotImagesRouter)
+router.use('/review-images', reviewImagesRouter)
 
 // PHASE 1 - TEST API ROUTER
 router.post('/test', function(req, res) {
