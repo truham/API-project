@@ -16,11 +16,11 @@ const validateSignup = [
       .exists({ checkFalsy: true })
       .withMessage('Please provide a last name.'),
     check('email')
-      .exists({ checkFalsy: true })
+      // .exists({ checkFalsy: true })
       .isEmail()
       .withMessage('Please provide a valid email.'),
     check('username')
-      .exists({ checkFalsy: true })
+      // .exists({ checkFalsy: true })
       .isLength({ min: 4 })
       .withMessage('Please provide a username with at least 4 characters.'),
     check('username')
@@ -34,11 +34,9 @@ const validateSignup = [
     handleValidationErrors // note this is from the ..utils/validation.js
   ];
 
-router.post(
-    '/',
-    validateSignup, // from the above; need to validate registration info first
-    // do they have firstName, lastName, username, email, etc.?
-    async (req, res) => {
+// validateSignup from the above; need to validate registration info first
+// do they have firstName, lastName, username, email, etc.?
+router.post('/', validateSignup, async (req, res) => {
       const { firstName, lastName, email, username, password } = req.body;
 
       // custom err res for user already exists with specified email

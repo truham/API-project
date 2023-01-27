@@ -22,10 +22,10 @@ router.delete('/:imageId', requireAuth, async (req, res) => {
     // spot must belong to the current user
     const findSpot = await Spot.findByPk(findSpotImage.spotId)
     if (findSpot.ownerId !== req.user.id){
-        res.status(404)
+        res.status(403)
         return res.json({
             message: "Unauthorized user",
-            statusCode: 404
+            statusCode: 403
         })
     }
     

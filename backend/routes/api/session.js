@@ -9,54 +9,51 @@ const { handleValidationErrors } = require('../../utils/validation');
 const validateLogin = [
     check('credential')
       .exists({ checkFalsy: true })
-      .notEmpty()
-      .withMessage('Please provide a valid email or username.'),
+      .withMessage('Email or username is required'),
     check('password')
       .exists({ checkFalsy: true })
-      .withMessage('Please provide a password.'),
+      .withMessage('Password is required'),
     handleValidationErrors
   ];
 
-router.post(
-    '/',
-    validateLogin,
-    async (req, res, next) => {
+router.post('/', validateLogin, async (req, res, next) => {
       const { credential, password } = req.body;
-  
-      const user = await User.login({ credential, password });
 
-      // come back to this custom error handling, it uses ../utils/validation.js file actually from User.login(...)
-      if (!credential) {
-        res.status(400)
-        return res.json({
-          message: "Validation error",
-          statusCode: 400,
-          errors: {
-            "credential": "Email or username is required"
-          }
-        })
-      }
-      if (!password) {
-        res.status(400)
-        return res.json({
-          message: "Validation error",
-          statusCode: 400,
-          errors: {
-            "password": "Password is required"
-          }
-        })
-      }
-      if (!credential && !password) {
-        res.status(400)
-        return res.json({
-          message: "Validation error",
-          statusCode: 400,
-          errors: {
-            "credential": "Email or username is required",
-            "password": "Password is required"
-          }
-        })
-      }
+      // don't need this because can keep validations in express-validators defined in validateLogin
+      // // come back to this custom error handling, it uses ../utils/validation.js file actually from User.login(...)
+      // if (!credential && !password) {
+      //   res.status(400)
+      //   return res.json({
+      //     message: "Validation error",
+      //     statusCode: 400,
+      //     errors: {
+      //       "credential": "Email or username is required",
+      //       "password": "Password is required"
+      //     }
+      //   })
+      // }
+      // if (!credential) {
+      //   res.status(400)
+      //   return res.json({
+      //     message: "Validation error",
+      //     statusCode: 400,
+      //     errors: {
+      //       "credential": "Email or username is required"
+      //     }
+      //   })
+      // }
+      // if (!password) {
+      //   res.status(400)
+      //   return res.json({
+      //     message: "Validation error",
+      //     statusCode: 400,
+      //     errors: {
+      //       "password": "Password is required"
+      //     }
+      //   })
+      // }
+
+      const user = await User.login({ credential, password });
 
       // custom err res for log in a user with invalid credentials / pw
       if (!user) {
@@ -86,9 +83,7 @@ router.post(
   );
 
 // logs user out (note, added in postman custom since aa doesn't test for it "Logout (HT)")
-router.delete(
-  '/',
-  (_req, res) => {
+router.delete('/', (_req, res) => {
     res.clearCookie('token');
     return res.json({ message: 'success' });
   }
@@ -96,11 +91,7 @@ router.delete(
 
 // user should stil have token if they've logged in; can verify their token validity via jwt methods
 // get current user
-router.get(
-    '/',
-    requireAuth,
-    restoreUser,
-    (req, res) => {
+router.get('/', requireAuth, restoreUser, (req, res) => {
       const { user } = req;
       if (user) {
         return res.json({
