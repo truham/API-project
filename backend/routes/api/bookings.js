@@ -75,7 +75,9 @@ router.put('/:bookingId', requireAuth, async (req, res) => {
     })
 
     // check for conflicts in existing bookings vs client requested booking
-    bookingsList.forEach(booking => {
+    // change forEach to for of loop to avoid cannot set headers after sent to client
+    // bookingsList.forEach(booking => {
+    for (let booking of bookingsList){
         // get existing booking's start and end dates' time to compare against
         let existingStartDate = new Date(booking.startDate).toDateString()
         let existingStartTime = new Date(existingStartDate).getTime()
@@ -120,7 +122,7 @@ router.put('/:bookingId', requireAuth, async (req, res) => {
                 }
             })
         }
-    })
+    }
 
     // actual editing phew
     if (startDate) findBooking.startDate = startDate

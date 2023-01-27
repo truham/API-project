@@ -50,8 +50,6 @@ router.post('/:reviewId/images', requireAuth, async (req, res) => {
         }
     })
 
-    console.log(findReviewImages)
-
     if (findReviewImages.length >= 10){
         res.status(403)
         return res.json({
@@ -68,9 +66,9 @@ router.post('/:reviewId/images', requireAuth, async (req, res) => {
         url
     })
 
-    res.json({
+    return res.json({
         id: addReviewImage.id,
-        reviewId: addReviewImage.reviewId,
+        // reviewId: addReviewImage.reviewId, // don't need to include this for success res
         url: addReviewImage.url
     })
 })
