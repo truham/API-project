@@ -159,7 +159,12 @@ router.post('/:spotId/bookings', requireAuth, async (req, res) => {
     })
 
     // check for conflicts in existing bookings vs client requested booking
-    bookingsList.forEach(booking => {
+    // cannot set headers after they are sent to the client indicates start of it is here
+    // shouldn't the forEach end if any of the below returns the custom errors?
+    // ah, i rmbr running into this in past, forEach returns implict undefined, so ALL of my conditions are being checked
+    // client is receiving multiple res.json returns, hence the error. would have to iterate differently
+    // bookingsList.forEach(booking => {
+    for (let booking of bookingsList) {
         // get existing booking's start and end dates' time to compare against
         let existingStartDate = new Date(booking.startDate).toDateString()
         let existingStartTime = new Date(existingStartDate).getTime()
@@ -204,12 +209,15 @@ router.post('/:spotId/bookings', requireAuth, async (req, res) => {
                 }
             })
         }
-    })
+    }
 
     // console.log(req.params.spotId) // white 3 in terminal
     // console.log(Number(req.params.spotId)) // yellow 3 in terminal
 
     // odd req.params.spotId populates as string
+    // create does build + save together, useful sequelize
+    // need to figure out error message "cannot set headers after they are sent to the client"
+    // thought it might be from .create
     const newBooking = await Booking.create({
         spotId: Number(req.params.spotId),
         userId: req.user.id,
@@ -320,22 +328,22 @@ router.post('/:spotId/reviews', requireAuth, validateReview, async (req, res) =>
 // POST /api/spots/:spotId/images
 router.post('/:spotId/images', requireAuth, async (req, res) => {
     const findSpot = await Spot.findByPk(req.params.spotId)
-        
-    // err handle, spot must belong to current user
-    if (findSpot.ownerId !== req.user.id){
-        res.status(403)
-        return res.json({
-            message: "Unauthorized user",
-            statusCode: 403
-        })
-    }
-
+     
     // err handle couldn't find spot with the specified id
     if (!findSpot) {
         res.status(404)
         return res.json({
             message: "Spot couldn't be found",
             statusCode: 404
+        })
+    }
+
+    // err handle, spot must belong to current user
+    if (findSpot.ownerId !== req.user.id){
+        res.status(403)
+        return res.json({
+            message: "Unauthorized user",
+            statusCode: 403
         })
     }
 
