@@ -208,17 +208,17 @@ router.get('/current', requireAuth, async (req, res) => {
 
     // handling the inclusion of "previewImage" within the "Spots" object
     bookingsList.forEach(booking => {
-        if (!booking.Spot.SpotImages.length){
-            booking.Spot.previewImage = 'No preview image available'
+        if (!booking.Spot.SpotImages.length) booking.Spot.previewImage = 'No preview image available'
+
+        // booking.Spot.SpotImages.forEach(image => {
+        let foundPreview = []
+        for (let image of booking.Spot.SpotImages){
+            if (image.preview) foundPreview.push(image)
         }
 
-        booking.Spot.SpotImages.forEach(image => {
-            if (image.preview){
-                booking.Spot.previewImage = image.url
-            } else {
-                booking.Spot.previewImage = 'No preview image available'
-            }
-        })
+        if (foundPreview.length) booking.Spot.previewImage = foundPreview[0].url
+        else booking.Spot.previewImage = 'No preview image available'
+
         delete booking.Spot.SpotImages
     })
 

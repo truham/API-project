@@ -121,13 +121,14 @@ router.get('/current', requireAuth, async (req, res) => {
             review.Spot.previewImage = 'No preview image available'
         }
 
+        let foundPreview = []
         review.Spot.SpotImages.forEach(image => {
-            if (image.preview){
-                review.Spot.previewImage = image.url
-            } else {
-                review.Spot.previewImage = 'No preview image available'
-            }
+            if (image.preview) foundPreview.push(image)
         })
+
+        if (foundPreview.length) review.Spot.previewImage = foundPreview[0].url
+        else review.Spot.previewImage = 'No preview image available'
+
         delete review.Spot.SpotImages
     })
 

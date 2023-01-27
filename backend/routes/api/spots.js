@@ -350,6 +350,27 @@ router.post('/:spotId/images', requireAuth, async (req, res) => {
     // grab info needed to create image
     const { url, preview } = req.body
 
+    // preview image diff situations per dan rec
+    // 'if add another preview:true image, then we should see newest image, and change og spotImage to preview:false'
+    // create a toggle that switches off former true when client provides true preview
+    // this sets it up so that there will only ever be ONE preview:true
+    // if only false previews, then other endpoints reliant on SpotImage will state 'no image found'
+    if (preview){
+        // find spotimage with current true preview to toggle off
+        const previewToggle = await SpotImage.findOne({
+            where: {
+                spotId: req.params.spotId,
+                preview: true
+            }
+        })
+
+        // if it exists, then we must toggle off
+        if (previewToggle){
+            previewToggle.preview = false
+            await previewToggle.save()
+        }
+    }
+
     // create spot with provided req.body
     const newImage = await SpotImage.create({
         spotId: req.params.spotId,
@@ -441,22 +462,22 @@ router.get('/current', requireAuth, async (req, res) => {
             total += star
         }
         let average = total / starsList.length
-        spot.avgRating = average 
+        spot.avgRating = average.toFixed(1)
+        if(!starsList.length) spot.avgRating = 'No star ratings available for this location'
         delete spot.Reviews 
     })
 
     spotsList.forEach(spot => {
-        if (!spot.SpotImages.length){
-            spot.previewImage = 'No preview image available'
-        }
+        if (!spot.SpotImages.length) spot.previewImage = 'No preview image available'
 
+        let foundPreview = []
         spot.SpotImages.forEach(image => {
-            if (image.preview){ 
-                spot.previewImage = image.url
-            } else {
-                spot.previewImage = 'No preview image available'
-            }
+            if (image.preview) foundPreview.push(image)
         })
+
+        if (foundPreview.length) spot.previewImage = foundPreview[0].url
+        else spot.previewImage = 'No preview image available'
+
         delete spot.SpotImages
     })
 
@@ -503,7 +524,8 @@ router.get('/:spotId', async (req, res) => {
         total += star
     }
     let average = total / starsList.length
-    spotFound.avgStarRating = average
+    spotFound.avgStarRating = average.toFixed(1)
+    if (!starsList.length) spotFound.avgStarRating = 'No star ratings available for this location'
 
     // key:value for SpotImages
     const spotImages = await SpotImage.findAll({
@@ -697,28 +719,32 @@ router.get('/', queryFiltersAllSpots, async (req, res) => {
 
         // finding the average of all reviews associated with single spot
         let total = 0
+
         for (let star of starsList){ // iterate thru each star for spot
             total += star
         }
-        let average = total / starsList.length // find its average
+        let average = (total / starsList.length).toFixed(1) // find its average
+        // .toFixed(1) to return avgRating as a FLOAT(2,1) format per dan recommendation
         spot.avgRating = average // assign new key value pair of avgRating: average calculation
+
+        if (!starsList.length) spot.avgRating = 'No star ratings available for this location'
+
         delete spot.Reviews // removes the excess info not desired from api doc
     })
 
     // handling previewImage
     spotsList.forEach(spot => {
         // if no spot image was found with associated spotId
-        if (!spot.SpotImages.length){
-            spot.previewImage = 'No preview image available'
-        }
+        if (!spot.SpotImages.length) spot.previewImage = 'No preview image available'
 
+        let foundPreview = []
         spot.SpotImages.forEach(image => {
-            if (image.preview){ // check whether t/f for existing spot preview image
-                spot.previewImage = image.url // if found, then assign the previewImage to the image's url
-            } else {
-                spot.previewImage = 'No preview image available' // if not found, then assign 'No preview image available'
-            }
+            if (image.preview) foundPreview.push(image)
         })
+
+        if (foundPreview.length) spot.previewImage = foundPreview[0].url
+        else spot.previewImage = 'No preview image available'
+
         delete spot.SpotImages // removes the excess info not desired from api doc
     })
 
