@@ -438,7 +438,6 @@ router.get('/current', requireAuth, async (req, res) => {
     })
 
     spotsList.forEach(spot => {
-        console.log(spot)
         if (!spot.SpotImages.length){
             spot.previewImage = 'No preview image available'
         }
@@ -681,7 +680,6 @@ router.get('/', queryFiltersAllSpots, async (req, res) => {
     spots.forEach(spot => {
         spotsList.push(spot.toJSON())
     })
-    console.log(spotsList)
 
     spotsList.forEach(spot => { // iterate over list of spots now, find the stars in reviews and url for previewImage
         let starsList = []
@@ -702,7 +700,6 @@ router.get('/', queryFiltersAllSpots, async (req, res) => {
     // handling previewImage
     spotsList.forEach(spot => {
         // if no spot image was found with associated spotId
-        console.log(spot)
         if (!spot.SpotImages.length){
             spot.previewImage = 'No preview image available'
         }
