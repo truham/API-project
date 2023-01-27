@@ -27,22 +27,23 @@ const validateSpot = [
         .exists({ checkFalsy: true })
         .withMessage('Country is required'),
     check('lat')
-        .exists({ checkFalsy: true })
+        // .exists({ checkFalsy: true })
         .isNumeric()
         .withMessage('Latitude is not valid'),
     check('lng')
-        .exists({ checkFalsy: true })
+        // .exists({ checkFalsy: true })
         .isNumeric()
         .withMessage('Longitude is not valid'),
     check('name')
         .exists({ checkFalsy: true })
+        .withMessage('Name is required')
         .isLength({ max: 50 })
         .withMessage('Name must be less than 50 characters'),
     check('description')
         .exists({ checkFalsy: true })
         .withMessage('Description is required'),
     check('price')
-        .exists({ checkFalsy: true })
+        // .exists({ checkFalsy: true }) // believe isNumeric() handles exists inherently
         .isNumeric()
         .withMessage('Price per day is required'),
     handleValidationErrors
@@ -322,10 +323,10 @@ router.post('/:spotId/images', requireAuth, async (req, res) => {
         
     // err handle, spot must belong to current user
     if (findSpot.ownerId !== req.user.id){
-        res.status(404)
+        res.status(403)
         return res.json({
             message: "Unauthorized user",
-            statusCode: 404
+            statusCode: 403
         })
     }
 
@@ -540,10 +541,10 @@ router.put('/:spotId', requireAuth, validateSpot, async (req, res) => {
 
     // err handle, spot must belong to current user
     if (findSpot.ownerId !== req.user.id){
-        res.status(404)
+        res.status(403)
         return res.json({
             message: "Unauthorized user",
-            statusCode: 404
+            statusCode: 403
         })
     }
     
@@ -608,10 +609,10 @@ router.delete('/:spotId', requireAuth, async (req, res) => {
 
     // err handle, spot must belong to current user
     if (findSpot.ownerId !== req.user.id){
-        res.status(404)
+        res.status(403)
         return res.json({
             message: "Unauthorized user",
-            statusCode: 404
+            statusCode: 403
         })
     }
 

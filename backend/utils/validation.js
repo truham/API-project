@@ -10,10 +10,10 @@ const handleValidationErrors = (req, _res, next) => {
       .array()
       .map((error) => `${error.msg}`);
 
-    const err = Error('Validation Error');
+    const err = Error('Validation error');
     err.errors = errors;
-    err.status = 400;
-    err.title = 'Validation Error';
+    // err.status = 400;
+    // err.title = 'Validation Error'; // doesn't seem like title is needed in any of the api doc responses
     next(err);
   }
   next();

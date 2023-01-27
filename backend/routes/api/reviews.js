@@ -36,10 +36,10 @@ router.post('/:reviewId/images', requireAuth, async (req, res) => {
 
     // error handle for must belong to current user
     if (findReview.userId !== req.user.id){
-        res.status(404)
+        res.status(403)
         return res.json({
             message: "Unauthorized user",
-            statusCode: 404
+            statusCode: 403
         })
     }
 
@@ -156,10 +156,10 @@ router.put('/:reviewId', requireAuth, validateReview, async (req, res) => {
 
     // error handle for must belong to current user
     if (findReview.userId !== req.user.id){
-        res.status(404)
+        res.status(403)
         return res.json({
             message: "Unauthorized user",
-            statusCode: 404
+            statusCode: 403
         })
     }
 
@@ -189,10 +189,10 @@ router.delete('/:reviewId', requireAuth, async (req, res) => {
 
     // error handle for must belong to current user
     if (findReview.userId !== req.user.id){
-        res.status(404)
+        res.status(403)
         return res.json({
             message: "Unauthorized user",
-            statusCode: 404
+            statusCode: 403
         })
     }
 

@@ -23,10 +23,10 @@ router.put('/:bookingId', requireAuth, async (req, res) => {
 
     // err handle, booking must belong to current user
     if (findBooking.userId !== req.user.id){
-        res.status(404)
+        res.status(403)
         return res.json({
             message: "Unauthorized user",
-            statusCode: 404
+            statusCode: 403
         })
     }
 
@@ -151,10 +151,10 @@ router.delete('/:bookingId', requireAuth, async (req, res) => {
 
     // err handle, booking must belong to current user
     if (findBooking.userId !== req.user.id){
-        res.status(404)
+        res.status(403)
         return res.json({
             message: "Unauthorized user",
-            statusCode: 404
+            statusCode: 403
         })
     }
 
