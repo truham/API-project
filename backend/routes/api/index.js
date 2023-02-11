@@ -27,9 +27,9 @@ router.use('/spot-images', spotImagesRouter)
 router.use('/review-images', reviewImagesRouter)
 
 // PHASE 1 - TEST API ROUTER
-router.post('/test', function(req, res) {
-    res.json({ requestBody: req.body });
-  });
+// router.post('/test', function(req, res) {
+//     res.json({ requestBody: req.body });
+//   });
 
 // // PHASE 3 - TEST AUTH
 // // GET /api/set-token-cookie
