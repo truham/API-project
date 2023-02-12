@@ -21,6 +21,17 @@ function LoginFormModal() {
     setErrors(valErrors);
   }, [credential, password]);
 
+  // log in demo user
+  const demoSignIn = (e) => {
+    // e.preventDefault() // returns an error reading undefined
+    // used for forms bc they refresh inherently, buttons do not
+
+    setCredential("Demo-lition");
+    setPassword("password");
+
+    handleSubmit();
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     setErrors([]);
@@ -32,7 +43,7 @@ function LoginFormModal() {
       });
   };
 
-  //
+  // disable login conditional
   const logInDisable = errors.length > 0 ? true : false;
 
   return (
@@ -74,7 +85,11 @@ function LoginFormModal() {
           >
             Log In
           </button>
-          <button className="login-demo-user" type="submit">
+          <button
+            onClick={(e) => demoSignIn(e)}
+            className="login-demo-user"
+            type="submit"
+          >
             Demo User
           </button>
         </form>
