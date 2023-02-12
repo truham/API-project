@@ -38,15 +38,30 @@ h3 {
   box-shadow: 3px 3px black;
 }
 
+.login-modal-button-disabled {
+  background-color: white;
+  color: gray;
+  margin: 10px 0px;
+  height: 40px;
+  cursor: pointer;
+  width: 93%;
+  border: gray solid 2px;
+  box-shadow: 3px 3px gray;
+}
+
 .login-demo-user {
   margin-top: 5px;
   margin-bottom: 20px;
   cursor: pointer;
   color: #30555d;
   text-decoration: underline;
+  background-color: white;
+  border: none;
 }
 
 .login-errors {
   list-style: none;
   color: red;
+  padding: 5px;
+  font-size: 14px;
 }

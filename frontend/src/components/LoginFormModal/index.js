@@ -1,5 +1,5 @@
 // frontend/src/components/LoginFormModal/index.js
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import * as sessionActions from "../../store/session";
 import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
@@ -12,6 +12,15 @@ function LoginFormModal() {
   const [errors, setErrors] = useState([]);
   const { closeModal } = useModal();
 
+  // disable log in
+  useEffect(() => {
+    const valErrors = [];
+
+    if (password.length < 6 || credential.length < 4) valErrors.push("");
+
+    setErrors(valErrors);
+  }, [credential, password]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     setErrors([]);
@@ -22,6 +31,9 @@ function LoginFormModal() {
         if (data && data.errors) setErrors(data.errors);
       });
   };
+
+  //
+  const logInDisable = errors.length > 0 ? true : false;
 
   return (
     <>
@@ -51,9 +63,19 @@ function LoginFormModal() {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-          <button className="login-modal-button" type="submit">Log In</button>
+          <button
+            disabled={logInDisable}
+            className={`${
+              logInDisable
+                ? "login-modal-button-disabled"
+                : "login-modal-button"
+            }`}
+            type="submit"
+          >
+            Log In
+          </button>
           <button className="login-demo-user" type="submit">
-            Temp Demo
+            Demo User
           </button>
         </form>
       </div>
