@@ -40,24 +40,27 @@ function ProfileButton({ user }) {
   const ulClassName = "profile-dropdown" + (showMenu ? "" : " hidden");
 
   return (
-    <>
-      <button onClick={openMenu}>
-        <i className="fas fa-user-circle" />
+    <div>
+      <button onClick={openMenu} className="menu-button">
+        <i className="fa-solid fa-bars login-icon" />
+        <i className="fas fa-user-circle profile-icon" />
       </button>
       <ul className={ulClassName} ref={ulRef}>
         {user ? (
           <>
-            <li>{user.username}</li>
+            <li>Hello, {user.username}</li>
             <li>
               {user.firstName} {user.lastName}
             </li>
             <li>{user.email}</li>
             <li>
-              <button onClick={logout}>Log Out</button>
+              <button className="button-logout" onClick={logout}>
+                Log Out
+              </button>
             </li>
           </>
         ) : (
-          <>
+          <div className="menu-modal-options">
             <OpenModalMenuItem
               itemText="Log In"
               onItemClick={closeMenu}
@@ -68,10 +71,10 @@ function ProfileButton({ user }) {
               onItemClick={closeMenu}
               modalComponent={<SignupFormModal />}
             />
-          </>
+          </div>
         )}
       </ul>
-    </>
+    </div>
   );
 }
 
