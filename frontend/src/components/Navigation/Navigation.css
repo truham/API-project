@@ -1,3 +1,73 @@
+/* hide menu when not clicked on */
 .hidden {
   display: none;
+}
+
+/* keep navbar outer parent fixed for scrolling */
+.navbar {
+  position: fixed;
+  width: 100%;
+  border-bottom: 2px solid grey;
+}
+
+/* ul parent containing the logo & menu button */
+.navbar-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 70px;
+}
+
+/* remove bulletpoints from ul (& its li children) */
+ul {
+  list-style-type: none;
+}
+
+/* resize logo to be slightly smaller than full parent size */
+.logo-image {
+  height: 60px;
+  padding-left: 20px;
+}
+
+/* cushion the double icon used */
+.login-icon {
+  margin-right: 12px;
+}
+
+/* styling the menu button, rounded with spacing */
+.menu-button {
+  height: 40px;
+  width: 70px;
+  border-radius: 50px;
+  margin-right: 20px;
+  cursor: pointer;
+}
+
+/* border and cushion for options that pop up */
+.profile-dropdown {
+  position: absolute;
+  border: 1px solid black;
+  box-shadow: 1px 1px 3px black;
+  text-align: left;
+  padding: 10px 15px 10px 15px;
+  right: 20px;
+  margin-top: 5px;
+}
+
+/* style logout button when logged in */
+/* come back to adjust button positioning */
+.button-logout {
+  height: 40px;
+  width: 75px;
+  border-radius: 50px;
+  padding: 0px 5px;
+  margin-top: 10px;
+  color: white;
+  background-color: darkgray;
+  border: 2px solid black;
+  cursor: pointer;
+}
+
+.menu-modal-options {
+  cursor: pointer;
 }
