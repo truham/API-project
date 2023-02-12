@@ -11,7 +11,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 280px;
+  height: 100%;
   width: 300px;
 }
 
@@ -31,14 +31,17 @@ h3 {
 .signup-modal-button {
   background-color: #ff5a5e;
   color: white;
-  margin: 10px 0px;
   height: 40px;
   cursor: pointer;
   width: 93%;
   box-shadow: 3px 3px black;
+  margin-top: 10px;
+  margin-bottom: 20px;
 }
 
 .signup-errors {
   list-style: none;
   color: red;
+  padding: 5px;
+  font-size: 14px;
 }
