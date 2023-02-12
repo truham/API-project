@@ -22,7 +22,7 @@ function LoginFormModal() {
   }, [credential, password]);
 
   // log in demo user
-  const demoSignIn = (e) => {
+  const demoSignIn = () => {
     // e.preventDefault() // returns an error reading undefined
     // used for forms bc they refresh inherently, buttons do not
 
@@ -86,7 +86,7 @@ function LoginFormModal() {
             Log In
           </button>
           <button
-            onClick={(e) => demoSignIn(e)}
+            onClick={demoSignIn}
             className="login-demo-user"
             type="submit"
           >
