@@ -1,5 +1,5 @@
 // frontend/src/components/LoginFormModal/index.js
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import * as sessionActions from "../../store/session";
 import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
@@ -12,6 +12,22 @@ function LoginFormModal() {
   const [errors, setErrors] = useState([]);
   const { closeModal } = useModal();
 
+  // disable log in
+  useEffect(() => {
+    const valErrors = [];
+
+    if (password.length < 6 || credential.length < 4) valErrors.push("");
+
+    setErrors(valErrors);
+  }, [credential, password]);
+
+  // log in demo user
+  // all buttons naturally submit if forms have onSubmit
+  const demoSignIn = () => {
+    setCredential("Demo-lition");
+    setPassword("password");
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     setErrors([]);
@@ -22,6 +38,9 @@ function LoginFormModal() {
         if (data && data.errors) setErrors(data.errors);
       });
   };
+
+  // disable login conditional
+  const logInDisable = errors.length > 0 ? true : false;
 
   return (
     <>
@@ -51,10 +70,24 @@ function LoginFormModal() {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-          <button className="login-modal-button" type="submit">Log In</button>
-          <div className="login-demo-user" type="submit">
-            Temp Demo
-          </div>
+          <button
+            disabled={logInDisable}
+            className={`${
+              logInDisable
+                ? "login-modal-button-disabled"
+                : "login-modal-button"
+            }`}
+            type="submit"
+          >
+            Log In
+          </button>
+          <button
+            onClick={demoSignIn}
+            className="login-demo-user"
+            type="submit"
+          >
+            Demo User
+          </button>
         </form>
       </div>
     </>
