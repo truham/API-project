@@ -52,9 +52,9 @@ function LoginFormModal() {
             required
           />
           <button className="login-modal-button" type="submit">Log In</button>
-          <div className="login-demo-user" type="submit">
+          <button className="login-demo-user" type="submit">
             Temp Demo
-          </div>
+          </button>
         </form>
       </div>
     </>
