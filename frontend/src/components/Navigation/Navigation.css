@@ -56,7 +56,6 @@ ul {
 }
 
 /* style logout button when logged in */
-/* come back to adjust button positioning */
 .button-logout {
   height: 40px;
   width: 75px;
@@ -67,6 +66,9 @@ ul {
   background-color: darkgray;
   border: 2px solid black;
   cursor: pointer;
+  display: table;
+  margin: auto;
+  margin-top: 10px;
 }
 
 .menu-modal-options {
