@@ -22,14 +22,10 @@ function LoginFormModal() {
   }, [credential, password]);
 
   // log in demo user
+  // all buttons naturally submit if forms have onSubmit
   const demoSignIn = () => {
-    // e.preventDefault() // returns an error reading undefined
-    // used for forms bc they refresh inherently, buttons do not
-
     setCredential("Demo-lition");
     setPassword("password");
-
-    handleSubmit();
   };
 
   const handleSubmit = (e) => {
