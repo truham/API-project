@@ -12,15 +12,6 @@ function LoginFormModal() {
   const [errors, setErrors] = useState([]);
   const { closeModal } = useModal();
 
-  // disable log in
-  useEffect(() => {
-    const valErrors = [];
-
-    if (password.length < 6 || credential.length < 4) valErrors.push("");
-
-    setErrors(valErrors);
-  }, [credential, password]);
-
   // log in demo user
   // all buttons naturally submit if forms have onSubmit
   const demoSignIn = () => {
@@ -40,7 +31,7 @@ function LoginFormModal() {
   };
 
   // disable login conditional
-  const logInDisable = errors.length > 0 ? true : false;
+  const logInDisable = credential.length < 4 || password.length < 6
 
   return (
     <>
