@@ -14,9 +14,16 @@ function LoginFormModal() {
 
   // log in demo user
   // all buttons naturally submit if forms have onSubmit
-  const demoSignIn = () => {
-    setCredential("Demo-lition");
-    setPassword("password");
+  const demoSignIn = (e) => {
+    // console.log(e)
+    e.preventDefault();
+
+    return dispatch(
+      sessionActions.login({ credential: "Demo-lition", password: "password" })
+    ).then(closeModal);
+    // switched to directly dispatching login above
+    // setCredential("Demo-lition");
+    // setPassword("password");
   };
 
   const handleSubmit = (e) => {
@@ -31,7 +38,7 @@ function LoginFormModal() {
   };
 
   // disable login conditional
-  const logInDisable = credential.length < 4 || password.length < 6
+  const logInDisable = credential.length < 4 || password.length < 6;
 
   return (
     <>
@@ -73,7 +80,7 @@ function LoginFormModal() {
             Log In
           </button>
           <button
-            onClick={demoSignIn}
+            onClick={(e) => demoSignIn(e)}
             className="login-demo-user"
             type="submit"
           >

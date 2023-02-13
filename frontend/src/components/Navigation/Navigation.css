@@ -5,7 +5,7 @@
 
 /* keep navbar outer parent fixed for scrolling */
 .navbar {
-  position: fixed;
+  position: sticky;
   width: 100%;
   border-bottom: 2px solid grey;
 }
