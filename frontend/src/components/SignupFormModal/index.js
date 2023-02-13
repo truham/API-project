@@ -15,23 +15,6 @@ function SignupFormModal() {
   const [errors, setErrors] = useState([]);
   const { closeModal } = useModal();
 
-  // disable sign up
-  useEffect(() => {
-    const valErrors = [];
-
-    if (
-      email.length < 1 ||
-      firstName < 1 ||
-      lastName < 1 ||
-      confirmPassword < 1 ||
-      username.length < 4 ||
-      password.length < 6
-    )
-      valErrors.push("");
-
-    setErrors(valErrors);
-  }, [email, username, firstName, lastName, password, confirmPassword]);
-
   const handleSubmit = (e) => {
     e.preventDefault();
     if (password === confirmPassword) {
@@ -56,7 +39,13 @@ function SignupFormModal() {
     ]);
   };
 
-  const signUpDisable = errors.length > 0 ? true : false;
+  const signUpDisable =
+    email.length < 1 ||
+    firstName < 1 ||
+    lastName < 1 ||
+    confirmPassword < 1 ||
+    username.length < 4 ||
+    password.length < 6;
 
   return (
     <>

@@ -1,0 +1,19 @@
+.homepage {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  position: fixed;
+  top: 30%;
+}
+
+.homepage-logo {
+  height: 100px;
+}
+
+.homepage-button {
+  height:30px;
+  width: 70px;
+  border-radius: 50px;
+  cursor: pointer;
+}
