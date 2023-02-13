@@ -58,7 +58,9 @@ const SpotDetails = () => {
             </div>
             <div className="stars-reviews">
               <i className="fa-solid fa-star"></i>
-              <p>{`${spot.avgStarRating} - ${spot.numReviews} reviews`}</p>
+              <p>{`${
+                Number(spot.avgStarRating) ? spot.avgStarRating : "New"
+              } - ${spot.numReviews} reviews`}</p>
             </div>
           </div>
           <div>
