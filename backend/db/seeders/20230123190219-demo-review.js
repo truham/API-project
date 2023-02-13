@@ -20,7 +20,7 @@ module.exports = {
         spotId: 2,
         userId: 1,
         review: 'Another fantastic location',
-        stars: 4.8
+        stars: 4.4
       },
       {
         spotId: 1,
@@ -37,8 +37,8 @@ module.exports = {
       {
         spotId: 3,
         userId: 3,
-        review: 'Nautical adventure',
-        stars: 4.75
+        review: 'Luscious adventure',
+        stars: 4.7
       }
     ], {});
   },

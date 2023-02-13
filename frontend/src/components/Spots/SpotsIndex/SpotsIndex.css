@@ -1,0 +1,7 @@
+.spots-tiles-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding-top: 70px;
+}
