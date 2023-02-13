@@ -43,7 +43,7 @@ module.exports = {
         {
           ownerId: 1,
           address: "456 Port City",
-          city: "San Francisco",
+          city: "Los Angles",
           state: "California",
           country: "USA",
           lat: 37.7645358,
