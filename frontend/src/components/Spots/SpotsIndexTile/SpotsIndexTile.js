@@ -10,7 +10,7 @@ const SpotsIndexTile = ({ spot }) => {
           <div className="tile-name-stars">
             <p className="tile-name">{spot.name}</p>
             <p className="tile-stars">
-              <i class="fa-solid fa-star"></i>
+              <i className="fa-solid fa-star"></i>
               {Number(spot.avgRating) ? spot.avgRating : "New"}
             </p>
           </div>
