@@ -2,6 +2,8 @@ import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getAllSpotsThunk } from "../../../store/spots";
 
+import "./SpotsIndex.css";
+
 import SpotsIndexTile from "../SpotsIndexTile/SpotsIndexTile";
 
 const SpotsIndex = () => {
@@ -18,11 +20,11 @@ const SpotsIndex = () => {
 
   return (
     <div>
-      <ul>
+      <div className="spots-tiles-container">
         {allSpots.map((spot) => (
           <SpotsIndexTile spot={spot} key={spot.id} />
         ))}
-      </ul>
+      </div>
     </div>
   );
 };

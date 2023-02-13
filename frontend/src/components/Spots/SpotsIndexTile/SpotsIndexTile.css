@@ -1,0 +1,48 @@
+.tile-container {
+  width: 270px;
+  cursor: pointer;
+  border: 2px solid black;
+  padding: 10px;
+  margin: 5px;
+}
+
+.tile-link {
+  text-decoration: none;
+  color: black;
+}
+
+.tile-text-content {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.tile-img {
+  width: 270px;
+  height: 250px;
+  object-fit: cover;
+}
+
+.tile-name-stars {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+
+.tile-name {
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.tile-location {
+  margin-bottom: 5px;
+}
+
+.tile-price-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.tile-price {
+  font-weight: bold;
+  margin-bottom: 5px;
+}

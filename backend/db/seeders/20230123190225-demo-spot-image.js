@@ -29,7 +29,7 @@ module.exports = {
         },
         {
           spotId: 4,
-          url: "https://wallpapers.com/images/hd/scenic-garden-howl-s-moving-castle-dz82vh10epu7ahxi.jpg",
+          url: "http://images6.fanpop.com/image/photos/43600000/Howl-s-Secret-Garden-in-Howl-s-Moving-Castle-howls-moving-castle-43698415-540-290.jpg",
           preview: true,
         },
         {

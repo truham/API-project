@@ -5,9 +5,10 @@
 
 /* keep navbar outer parent fixed for scrolling */
 .navbar {
-  position: sticky;
+  position: fixed;
   width: 100%;
   border-bottom: 2px solid grey;
+  background-color: white;
 }
 
 /* ul parent containing the logo & menu button */
