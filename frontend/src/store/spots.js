@@ -23,7 +23,6 @@ const getSingleSpotAction = (spotId) => {
 // Display all spots at root page
 export const getAllSpotsThunk = () => async (dispatch) => {
   const res = await csrfFetch("/api/spots");
-
   if (res.ok) {
     const allSpots = await res.json();
     // console.log("thunk allSpots", allSpots);
@@ -34,7 +33,6 @@ export const getAllSpotsThunk = () => async (dispatch) => {
 // View single spot details
 export const getSingleSpotThunk = (spotId) => async (dispatch) => {
   const res = await csrfFetch(`/api/spots/${spotId}`);
-
   if (res.ok) {
     const singleSpot = await res.json();
     // console.log("thunk singleSpot", singleSpot);
