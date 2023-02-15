@@ -1,11 +1,16 @@
 .single-spot-container {
   /* padding-top: 70px; */
+  display: flex;
+  flex-direction: column;
   padding-left: 20px;
   padding-right: 20px;
 }
 
 .single-spot-image {
   height: 412px;
+  max-width: 100%;
+  flex-basis: auto;
+  object-fit: cover;
   /* width: 50%; */
 }
 

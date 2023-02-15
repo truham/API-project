@@ -10,6 +10,11 @@ const SpotDetails = () => {
   const dispatch = useDispatch();
   const { spotId } = useParams();
 
+  // Post Review - check if user is logged in
+  const sessionUser = useSelector((state) => state.session.user);
+  console.log(sessionUser);
+  const sessionUserReviewed = sessionUser.id;
+
   // --------------- Spot's Details Feature ---------------
   // grab the singleSpot from state for react usage
   const spot = useSelector((state) => state.spots.singleSpot);
@@ -26,6 +31,17 @@ const SpotDetails = () => {
 
   useEffect(() => {
     dispatch(getSpotsReviewsThunk(spotId));
+  }, [dispatch]);
+
+  // --------------- Current User's Reviews ---------------
+  useEffect(() => {
+    // dispatch
+    // create thunk to get reviews of current user from backend
+    // update state from action + store reducer
+    // access reviews to check if current user has written a review for the spot
+    // if not, populate button to create review
+    // if so, hide button from user
+    // delete button pops up for logged in user's review only
   }, [dispatch]);
 
   // --------------- Additional business logic ---------------
@@ -70,8 +86,8 @@ const SpotDetails = () => {
 
   return (
     <div className="single-spot-container">
+      {/* Heading */}
       <div>
-        {/* Heading */}
         <h3>{spot.name}</h3>
         <p className="single-spot-heading">
           {spot.city}, {spot.state}, {spot.country}
@@ -126,6 +142,14 @@ const SpotDetails = () => {
       </div>
 
       <hr className="hz-line"></hr>
+
+      {/* {sessionUser && (
+        <div className="nav-right-loggedin-user">
+          <li className="nav-right-login">
+
+          </li>
+        </div>
+      )} */}
 
       {/* Ratings & Reviews Feature */}
       <div className="ratings-reviews-container">
