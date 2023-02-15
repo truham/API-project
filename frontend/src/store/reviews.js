@@ -39,7 +39,7 @@ export const getSpotsReviewsThunk = (spotId) => async (dispatch) => {
 };
 
 // Post a new review for spot based on spotId
-export const postNewReviewThunk = (review, spotId) => async (dispatch) => {
+export const postNewReviewThunk = (review, spotId, user) => async (dispatch) => {
   const res = await csrfFetch(`/api/spots/${spotId}/reviews`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -48,8 +48,9 @@ export const postNewReviewThunk = (review, spotId) => async (dispatch) => {
 
   if (res.ok) {
     const newReview = await res.json();
-    dispatch(postNewReviewAction(newReview));
     console.log("NEW REVIEW RES", newReview);
+    newReview.User = user
+    dispatch(postNewReviewAction(newReview));
     return newReview;
   }
 };

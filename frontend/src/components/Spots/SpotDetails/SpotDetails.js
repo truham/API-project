@@ -89,103 +89,105 @@ const SpotDetails = () => {
   );
 
   return (
-    <div className="single-spot-container">
-      {/* Heading */}
-      <div>
-        <h3>{spot.name}</h3>
-        <p className="single-spot-heading">
-          {spot.city}, {spot.state}, {spot.country}
-        </p>
-      </div>
-
-      {/* Images */}
-      <div>
-        <img className="single-spot-image" src={previewImage.url} />
-        {extraImages.map((image) => (
-          <img
-            key={image.url}
-            className="single-spot-extra-images"
-            src={image.url}
-          ></img>
-        ))}
-      </div>
-
-      <div className="single-spot-info-container">
-        {/* Text */}
+    <div className="single-spot-outer">
+      <div className="single-spot-container">
+        {/* Heading */}
         <div>
-          <h3>{`Hosted by ${spot.Owner.firstName} ${spot.Owner.lastName}`}</h3>
-          <p>{`${spot.description}`}</p>
+          <h3>{spot.name}</h3>
+          <p className="single-spot-heading">
+            {spot.city}, {spot.state}, {spot.country}
+          </p>
         </div>
 
-        {/* Callout box */}
-        <div className="single-spot-callout-container">
-          <div className="price-reviews-container">
-            <div>
-              <p>{`$${spot.price} night`}</p>
-            </div>
-            <div className="stars-reviews">
-              <i className="fa-solid fa-star"></i>
-              <p>{`${
-                Number(spot.avgStarRating)
-                  ? `${spot.avgStarRating} · ${spot.numReviews} ${
-                      Number(spot.numReviews) === 1 ? "review" : "reviews"
-                    }`
-                  : "New"
-              }`}</p>
-            </div>
-          </div>
+        {/* Images */}
+        <div>
+          <img className="single-spot-image" src={previewImage.url} />
+          {extraImages.map((image) => (
+            <img
+              key={image.url}
+              className="single-spot-extra-images"
+              src={image.url}
+            ></img>
+          ))}
+        </div>
+
+        <div className="single-spot-info-container">
+          {/* Text */}
           <div>
-            <button
-              className="reserve-button"
-              onClick={() => alert("Feature coming soon")}
-            >
-              Reserve
-            </button>
+            <h3>{`Hosted by ${spot.Owner.firstName} ${spot.Owner.lastName}`}</h3>
+            <p>{`${spot.description}`}</p>
+          </div>
+
+          {/* Callout box */}
+          <div className="single-spot-callout-container">
+            <div className="price-reviews-container">
+              <div>
+                <p>{`$${spot.price} night`}</p>
+              </div>
+              <div className="stars-reviews">
+                <i className="fa-solid fa-star"></i>
+                <p>{`${
+                  Number(spot.avgStarRating)
+                    ? `${spot.avgStarRating} · ${spot.numReviews} ${
+                        Number(spot.numReviews) === 1 ? "review" : "reviews"
+                      }`
+                    : "New"
+                }`}</p>
+              </div>
+            </div>
+            <div>
+              <button
+                className="reserve-button"
+                onClick={() => alert("Feature coming soon")}
+              >
+                Reserve
+              </button>
+            </div>
           </div>
         </div>
-      </div>
 
-      <hr className="hz-line"></hr>
+        <hr className="hz-line"></hr>
 
-      {/* Ratings & Reviews Feature */}
-      <div className="ratings-reviews-container">
-        {/* R&R Heading */}
-        <div className="ratings-reviews-heading">
-          <i className="fa-solid fa-star"></i>
-          <p>{`${
-            Number(spot.avgStarRating)
-              ? `${spot.avgStarRating} · ${spot.numReviews} ${
-                  Number(spot.numReviews) === 1 ? "review" : "reviews"
-                }`
-              : "New"
-          }`}</p>
-        </div>
+        {/* Ratings & Reviews Feature */}
+        <div className="ratings-reviews-container">
+          {/* R&R Heading */}
+          <div className="ratings-reviews-heading">
+            <i className="fa-solid fa-star"></i>
+            <p>{`${
+              Number(spot.avgStarRating)
+                ? `${spot.avgStarRating} · ${spot.numReviews} ${
+                    Number(spot.numReviews) === 1 ? "review" : "reviews"
+                  }`
+                : "New"
+            }`}</p>
+          </div>
 
-        {/* Create Review Button for Session User */}
-        {sessionUser && !sessionUserOwned && !sessionUserReview && (
-          <button className="post-your-review-button">
-            <OpenModalMenuItem
-              itemText="Post Your Review"
-              modalComponent={<ReviewFormModal />}
-            />
-          </button>
-        )}
+          {/* Create Review Button for Session User */}
+          {sessionUser && !sessionUserOwned && !sessionUserReview && (
+            <button className="post-your-review-button">
+              <OpenModalMenuItem
+                itemText="Post Your Review"
+                modalComponent={<ReviewFormModal />}
+              />
+            </button>
+          )}
 
-        {/* List of Reviews */}
-        <div>
-          <ul>
-            {/* refactor for conditional later */}
-            {reviews.length
-              ? reviews.map((review) => (
-                  <li key={review.id}>
-                    <p>{review.User.firstName}</p>
-                    <p>{dateCreator(review.createdAt)}</p>
-                    <p>{review.review}</p>
-                    <br></br>
-                  </li>
-                ))
-              : "Be the first to post a review!"}
-          </ul>
+          {/* List of Reviews */}
+          <div>
+            <ul>
+              {/* refactor for conditional later */}
+              {reviews.length
+                ? reviews.map((review) => (
+                    <li key={review.id}>
+                      <p>{review.User.firstName}</p>
+                      <p>{dateCreator(review.createdAt)}</p>
+                      <p>{review.review}</p>
+                      <br></br>
+                    </li>
+                  ))
+                : "Be the first to post a review!"}
+            </ul>
+          </div>
         </div>
       </div>
     </div>

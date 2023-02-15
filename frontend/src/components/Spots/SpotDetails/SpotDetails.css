@@ -1,9 +1,16 @@
+.single-spot-outer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .single-spot-container {
   /* padding-top: 70px; */
   display: flex;
   flex-direction: column;
   padding-left: 20px;
   padding-right: 20px;
+  max-width: 1080px;
 }
 
 .single-spot-image {

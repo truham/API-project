@@ -2,30 +2,47 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
 import { postNewReviewThunk } from "../../../store/reviews";
+import { useModal } from "../../../context/Modal";
 import "./ReviewFormModal.css";
 
 function ReviewFormModal() {
   const dispatch = useDispatch();
   const history = useHistory();
+  const { closeModal } = useModal();
+
+  // Grab spotId information from state
   const spotId = useSelector((state) => state.spots.singleSpot.id);
 
-  const [review, setReview] = useState("");
-  const [stars, setStars] = useState(0);
+  // Gather logged in user information
+  const user = useSelector((state) => state.session.user);
+  let currentUser = {};
+  currentUser.firstName = user.firstName;
+  currentUser.lastName = user.lastName;
+  currentUser.id = user.id;
 
-  const onSubmit = (e) => {
+  // Form input values
+  const [review, setReview] = useState("");
+  const [stars, setStars] = useState(4);
+  // manually set to 4 to test disable, reset to 0 once stars are working
+
+  const onSubmit = async (e) => {
     e.preventDefault();
 
     const newReview = {
       review,
-      stars: "5",
+      stars,
     };
 
-    dispatch(postNewReviewThunk(newReview, spotId));
+    dispatch(postNewReviewThunk(newReview, spotId, currentUser)).then(
+      closeModal
+    );
 
     history.push(`/spots/${spotId}`);
   };
 
   const submitReviewDisabled = review.length < 10 || stars === 0;
+
+  const [hover, setHover] = useState(0);
 
   return (
     <>
@@ -43,18 +60,30 @@ function ReviewFormModal() {
           <div className="review-form-stars-container">
             {/* Each star value 1-5
             On hover/click, set stars value to appropriate number */}
-            <i className="fa-regular fa-star"></i>
-            <i className="fa-regular fa-star"></i>
-            <i className="fa-regular fa-star"></i>
-            <i className="fa-regular fa-star"></i>
-            <i className="fa-regular fa-star"></i>
+
+            <span className="star">
+              <i className="fa-regular fa-star"></i>
+            </span>
+            <span className="star">
+              <i className="fa-regular fa-star"></i>
+            </span>
+            <span className="star">
+              <i className="fa-regular fa-star"></i>
+            </span>
+            <span className="star">
+              <i className="fa-regular fa-star"></i>
+            </span>
+            <span className="star">
+              <i className="fa-regular fa-star"></i>
+            </span>
+
             <span>Stars</span>
           </div>
           <div className="review-form-button-container">
             <button
-              disabled={false}
+              disabled={submitReviewDisabled}
               className={`${
-                false
+                submitReviewDisabled
                   ? "review-form-submit-button-disabled"
                   : "review-form-submit-button"
               }`}
