@@ -64,3 +64,15 @@
   display: flex;
   margin-bottom: 15px;
 }
+
+.post-your-review-button {
+  background-color: #999999;
+  color: white;
+  width: 150px;
+  cursor: pointer;
+  border: black solid 2px;
+  box-shadow: 3px 3px black;
+  margin-bottom: 15px;
+  padding: 3px 10px;
+  list-style-type: none;
+}

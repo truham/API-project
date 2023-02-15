@@ -3,17 +3,17 @@ import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import { getSingleSpotThunk } from "../../../store/spots";
 import { getSpotsReviewsThunk } from "../../../store/reviews";
+
+// Create New Review Modal + Form
+import OpenModalMenuItem from "../../Navigation/OpenModalMenuItem";
+import ReviewFormModal from "../../Reviews/ReviewFormModal/ReviewFormModal";
+
 import "./SpotDetails.css";
 
 const SpotDetails = () => {
   // pass spotId from params to thunk to search for spot in backend
   const dispatch = useDispatch();
   const { spotId } = useParams();
-
-  // Post Review - check if user is logged in
-  const sessionUser = useSelector((state) => state.session.user);
-  console.log(sessionUser);
-  const sessionUserReviewed = sessionUser.id;
 
   // --------------- Spot's Details Feature ---------------
   // grab the singleSpot from state for react usage
@@ -33,16 +33,20 @@ const SpotDetails = () => {
     dispatch(getSpotsReviewsThunk(spotId));
   }, [dispatch]);
 
-  // --------------- Current User's Reviews ---------------
-  useEffect(() => {
-    // dispatch
-    // create thunk to get reviews of current user from backend
-    // update state from action + store reducer
-    // access reviews to check if current user has written a review for the spot
-    // if not, populate button to create review
-    // if so, hide button from user
-    // delete button pops up for logged in user's review only
-  }, [dispatch]);
+  // --------------- Current User Reviewed? ---------------
+  // check if user is logged in
+  const sessionUser = useSelector((state) => state.session.user);
+  // check if user has written a review
+  const sessionUserReview = reviews.find(
+    (review) => review.userId === sessionUser?.id
+  );
+  const sessionUserOwned = spot.ownerId === sessionUser?.id;
+
+  // if spot belongs to owner, don't populate button
+
+  // if not, populate button to create review
+  // if so, hide button from user
+  // delete button pops up for logged in user's review only
 
   // --------------- Additional business logic ---------------
   // if first render returns empty object
@@ -143,14 +147,6 @@ const SpotDetails = () => {
 
       <hr className="hz-line"></hr>
 
-      {/* {sessionUser && (
-        <div className="nav-right-loggedin-user">
-          <li className="nav-right-login">
-
-          </li>
-        </div>
-      )} */}
-
       {/* Ratings & Reviews Feature */}
       <div className="ratings-reviews-container">
         {/* R&R Heading */}
@@ -164,6 +160,17 @@ const SpotDetails = () => {
               : "New"
           }`}</p>
         </div>
+
+        {/* Create Review Button for Session User */}
+        {sessionUser && !sessionUserOwned && !sessionUserReview && (
+          <button className="post-your-review-button">
+            <OpenModalMenuItem
+              itemText="Post Your Review"
+              modalComponent={<ReviewFormModal />}
+            />
+          </button>
+        )}
+
         {/* List of Reviews */}
         <div>
           <ul>
