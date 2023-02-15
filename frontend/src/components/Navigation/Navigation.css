@@ -25,6 +25,21 @@ ul {
   list-style-type: none;
 }
 
+/* position two items on right nav when logged in */
+.nav-right-loggedin-user {
+  display: flex;
+  align-items: center;
+}
+
+/* style text create new spot */
+.nav-right-new-spot {
+  text-decoration: none;
+  padding-right: 15px;
+  color: #00525e;
+  font-weight: bold;
+  font-size: 14px;
+}
+
 /* resize logo to be slightly smaller than full parent size */
 .logo-image {
   height: 40px;

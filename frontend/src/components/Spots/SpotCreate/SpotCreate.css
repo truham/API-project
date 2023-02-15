@@ -1,0 +1,65 @@
+.create-spot-form {
+  display: flex;
+  flex-direction: column;
+  padding-left: 10vw;
+  padding-right: 10vw;
+  width: 500px;
+}
+
+.create-spot-errors {
+  color: red;
+}
+
+.create-spot-hz-line {
+  margin: 20px 10px;
+}
+
+.create-spot-country {
+  display: flex;
+  flex-direction: column;
+}
+
+.create-spot-address {
+  display: flex;
+  flex-direction: column;
+}
+
+.create-spot-city,
+.create-spot-state,
+.create-spot-lat,
+.create-spot-lng {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.create-spot-city-state,
+.create-spot-lng-lat {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.create-spot-photos-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.create-spot-photos-container > input {
+  margin: 5px 0px;
+}
+
+.create-spot-submit-button {
+  background-color: #ff5a5e;
+  color: white;
+  margin: 10px 0px;
+  cursor: pointer;
+  height: 30px;
+  width: 150px;
+  box-shadow: 3px 3px black;
+}
+
+.create-spot-button-container {
+  display: flex;
+  justify-content: center;
+}

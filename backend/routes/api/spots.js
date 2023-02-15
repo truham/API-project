@@ -355,7 +355,8 @@ router.post('/:spotId/images', requireAuth, async (req, res) => {
     // create a toggle that switches off former true when client provides true preview
     // this sets it up so that there will only ever be ONE preview:true
     // if only false previews, then other endpoints reliant on SpotImage will state 'no image found'
-    if (preview){
+    // console.log(preview === true)
+    if (preview === true){
         // find spotimage with current true preview to toggle off
         const previewToggle = await SpotImage.findOne({
             where: {
