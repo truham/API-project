@@ -22,7 +22,7 @@ const SpotDetails = () => {
   // --------------- Spot's Ratings & Reviews Feature ---------------
   const reviewsList = useSelector((state) => state.reviews.spot);
   const reviews = Object.values(reviewsList);
-  console.log("reviews", reviews);
+  // console.log("reviews", reviews);
 
   useEffect(() => {
     dispatch(getSpotsReviewsThunk(spotId));
@@ -63,6 +63,11 @@ const SpotDetails = () => {
     return dateOutput;
   };
 
+  const previewImage = spot.SpotImages.find((image) => image.preview);
+  const extraImages = spot.SpotImages.filter(
+    (image) => image.preview === false
+  );
+
   return (
     <div className="single-spot-container">
       <div>
@@ -75,8 +80,14 @@ const SpotDetails = () => {
 
       {/* Images */}
       <div>
-        <img className="single-spot-image" src={spot.SpotImages[0].url} />
-        {/* {spotImages.map((image) => (image ? console.log(image.url) : "null"))} */}
+        <img className="single-spot-image" src={previewImage.url} />
+        {extraImages.map((image) => (
+          <img
+            key={image.url}
+            className="single-spot-extra-images"
+            src={image.url}
+          ></img>
+        ))}
       </div>
 
       <div className="single-spot-info-container">

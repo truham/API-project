@@ -6,6 +6,7 @@ import Navigation from "./components/Navigation";
 // import HomePage from "./components/HomePage";
 import SpotsIndex from "./components/Spots/SpotsIndex/SpotsIndex";
 import SpotDetails from "./components/Spots/SpotDetails/SpotDetails";
+import PostNewSpot from "./components/Spots/SpotCreate/SpotCreate";
 
 function App() {
   const dispatch = useDispatch();
@@ -23,6 +24,9 @@ function App() {
         <Switch>
           <Route exact path="/">
             <SpotsIndex />
+          </Route>
+          <Route path="/spots/new">
+            <PostNewSpot />
           </Route>
           <Route path="/spots/:spotId">
             <SpotDetails />

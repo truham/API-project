@@ -9,6 +9,10 @@
   /* width: 50%; */
 }
 
+.single-spot-extra-images {
+  height: 412px;
+}
+
 .single-spot-info-container {
   display: flex;
   flex-wrap: wrap;

@@ -17,10 +17,21 @@ function Navigation({ isLoaded }) {
             <img className="logo-image" src={logo}></img>
           </NavLink>
         </li>
-        {isLoaded && (
-          <li className="nav-right-login">
+        {isLoaded && sessionUser ? (
+          <div className="nav-right-loggedin-user">
+            <li>
+              <NavLink className="nav-right-new-spot" exact to="/spots/new">
+                Create a New Spot
+              </NavLink>
+            </li>
+            <li className="nav-right-login">
+              <ProfileButton className="profile-button" user={sessionUser} />
+            </li>
+          </div>
+        ) : (
+          <div className="nav-right-login">
             <ProfileButton className="profile-button" user={sessionUser} />
-          </li>
+          </div>
         )}
       </ul>
     </nav>
