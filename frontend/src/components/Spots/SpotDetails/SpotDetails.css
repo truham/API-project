@@ -83,3 +83,16 @@
   padding: 3px 10px;
   list-style-type: none;
 }
+
+.spot-delete-review-button {
+  background-color: #999999;
+  color: white;
+  width: 60px;
+  cursor: pointer;
+  border: black solid 2px;
+  box-shadow: 2px 2px black;
+  list-style-type: none;
+  padding: 1px 0px;
+  margin-top: 5px;
+  margin-bottom: 18px;
+}

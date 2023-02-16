@@ -8,6 +8,9 @@ import { getSpotsReviewsThunk } from "../../../store/reviews";
 import OpenModalMenuItem from "../../Navigation/OpenModalMenuItem";
 import ReviewFormModal from "../../Reviews/ReviewFormModal/ReviewFormModal";
 
+// Delete Review Modal
+import ReviewDeleteModal from "../../Reviews/ReviewDeleteModal/ReviewDeleteModal";
+
 import "./SpotDetails.css";
 
 const SpotDetails = () => {
@@ -122,7 +125,9 @@ const SpotDetails = () => {
           <div className="single-spot-callout-container">
             <div className="price-reviews-container">
               <div>
-                <span className="tile-price">{`$${spot.price}`}</span>
+                <span className="tile-price">{`$${Number(spot.price).toFixed(
+                  2
+                )}`}</span>
                 <span>{` night`}</span>
               </div>
               <div className="stars-reviews">
@@ -176,13 +181,26 @@ const SpotDetails = () => {
           {/* List of Reviews */}
           <div>
             <ul>
-              {/* refactor for conditional later */}
               {reviews.length
                 ? reviews.map((review) => (
                     <li key={review.id}>
                       <p>{review.User.firstName}</p>
                       <p>{dateCreator(review.createdAt)}</p>
                       <p>{review.review}</p>
+                      {/* Populate review delete for logged in users */}
+                      {review.userId === sessionUser?.id && (
+                        <button className="spot-delete-review-button">
+                          <OpenModalMenuItem
+                            itemText="Delete"
+                            modalComponent={
+                              <ReviewDeleteModal
+                                reviewId={review.id}
+                                spotId={spotId}
+                              />
+                            }
+                          />
+                        </button>
+                      )}
                       <br></br>
                     </li>
                   ))
