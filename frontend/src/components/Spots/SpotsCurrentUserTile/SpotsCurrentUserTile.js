@@ -42,7 +42,7 @@ const SpotsCurrentUserTile = ({ spot }) => {
             <button className="buttons-update-delete">
               <OpenModalMenuItem
                 itemText="Delete"
-                modalComponent={<SpotsDeleteModal />}
+                modalComponent={<SpotsDeleteModal spotId={spot.id} />}
               />
             </button>
           </div>

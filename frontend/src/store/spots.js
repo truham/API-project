@@ -6,6 +6,7 @@ const POST_NEW_SPOT = "spots/POST_NEW_SPOT";
 const POST_NEW_IMAGE = "spots/POST_NEW_IMAGE";
 const GET_CURRENT_USER_SPOTS = "spots/GET_CURRENT_USER_SPOTS";
 const EDIT_SINGLE_SPOT = "spots/PUT_SINGLE_SPOT";
+const DELETE_SINGLE_SPOT = "spots/DELETE_SINGLE_SPOT";
 
 /* ------- ACTIONS ------- */
 const getAllSpotsAction = (spots) => {
@@ -47,6 +48,13 @@ const editSpotAction = (spot) => {
   return {
     type: EDIT_SINGLE_SPOT,
     spot,
+  };
+};
+
+const deleteSpotAction = (spotId) => {
+  return {
+    type: DELETE_SINGLE_SPOT,
+    spotId,
   };
 };
 
@@ -127,9 +135,22 @@ export const editSpotThunk = (spot, spotId) => async (dispatch) => {
 
   if (res.ok) {
     const editedSpot = await res.json();
-    console.log("thunk editedSpot", editedSpot);
+    // console.log("thunk editedSpot", editedSpot);
     dispatch(editSpotAction(editedSpot));
     return editedSpot;
+  }
+};
+
+// Delete a single spot
+export const deleteSpotThunk = (spotId) => async (dispatch) => {
+  const res = await csrfFetch(`/api/spots/${spotId}`, {
+    method: "DELETE",
+  });
+
+  if (res.ok) {
+    // res from backend is message deleted + 200 status
+    dispatch(deleteSpotAction(spotId));
+    dispatch(getCurrentUserSpotsThunk())
   }
 };
 
@@ -177,6 +198,9 @@ const spotsReducer = (state = initialState, action) => {
       // action.spots.Spots.forEach((spot) => (currentUserSpots[spot.id] = spot));
       return { ...newState, currentUserSpots: action.spots };
     case EDIT_SINGLE_SPOT:
+      return { ...newState };
+    case DELETE_SINGLE_SPOT:
+      delete newState.currentUserSpots[action.spotId];
       return { ...newState };
     default:
       return state;
