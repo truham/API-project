@@ -19,7 +19,7 @@ const SpotsDeleteModal = ({ spotId }) => {
     await dispatch(deleteSpotThunk(spotId)).then(closeModal);
     // await dispatch(getCurrentUserSpotsThunk()).then(closeModal);
 
-    history.push("/spots/current");
+    // history.push("/spots/current");
   };
 
   return (

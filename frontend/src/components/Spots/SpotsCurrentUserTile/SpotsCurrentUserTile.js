@@ -27,7 +27,9 @@ const SpotsCurrentUserTile = ({ spot }) => {
       <div className="current-tile-price-container">
         <div>
           <Link className="tile-link" to={`/spots/${spot.id}`}>
-            <span className="tile-price">{`$${spot.price}`}</span>
+            <span className="tile-price">{`$${Number(spot.price).toFixed(
+              2
+            )}`}</span>
             <span>{` night`}</span>
           </Link>
         </div>
