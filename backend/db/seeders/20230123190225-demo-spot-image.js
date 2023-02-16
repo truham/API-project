@@ -24,7 +24,7 @@ module.exports = {
         },
         {
           spotId: 3,
-          url: "https://c4.wallpaperflare.com/wallpaper/619/548/909/fantasy-art-anime-studio-ghibli-my-neighbor-totoro-wallpaper-preview.jpg",
+          url: "https://64.media.tumblr.com/4de4fd8afe332c162dfb88e72fea2f6f/tumblr_o7c5vdW0LB1qa9gmgo10_1280.jpg",
           preview: true,
         },
         {
