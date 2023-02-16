@@ -1,5 +1,7 @@
 import { csrfFetch } from "./csrf";
 
+import { getSingleSpotThunk } from "./spots";
+
 const GET_SPOTS_REVIEWS = "spots/GET_SPOTS_REVIEWS";
 const POST_NEW_REVIEW = "reviews/POST_NEW_REVIEW";
 // const GET_USER_REVIEWS = "reviews/GET_USER_REVIEWS"; // complete feature later
@@ -39,21 +41,23 @@ export const getSpotsReviewsThunk = (spotId) => async (dispatch) => {
 };
 
 // Post a new review for spot based on spotId
-export const postNewReviewThunk = (review, spotId, user) => async (dispatch) => {
-  const res = await csrfFetch(`/api/spots/${spotId}/reviews`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(review),
-  });
+export const postNewReviewThunk =
+  (review, spotId, user) => async (dispatch) => {
+    const res = await csrfFetch(`/api/spots/${spotId}/reviews`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(review),
+    });
 
-  if (res.ok) {
-    const newReview = await res.json();
-    console.log("NEW REVIEW RES", newReview);
-    newReview.User = user
-    dispatch(postNewReviewAction(newReview));
-    return newReview;
-  }
-};
+    if (res.ok) {
+      const newReview = await res.json();
+      // console.log("NEW REVIEW RES", newReview);
+      newReview.User = user;
+      dispatch(postNewReviewAction(newReview));
+      dispatch(getSingleSpotThunk(spotId));
+      return newReview;
+    }
+  };
 
 /* ------- INITIAL STATE ------- */
 const initialState = {

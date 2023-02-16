@@ -18,8 +18,8 @@ const SpotsIndexTile = ({ spot }) => {
             {spot.city}, {spot.state}
           </div>
           <div className="tile-price-container">
-            <p className="tile-price">{`$${spot.price}`}</p>
-            <p>{`/night`}</p>
+            <span className="tile-price">{`$${spot.price}`}</span>
+            <span>{` night`}</span>
           </div>
         </div>
       </Link>

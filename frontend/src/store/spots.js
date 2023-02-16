@@ -4,6 +4,9 @@ const GET_ALL_SPOTS = "spots/GET_ALL_SPOTS";
 const GET_SINGLE_SPOT = "spots/GET_SINGLE_SPOT";
 const POST_NEW_SPOT = "spots/POST_NEW_SPOT";
 const POST_NEW_IMAGE = "spots/POST_NEW_IMAGE";
+const GET_CURRENT_USER_SPOTS = "spots/GET_CURRENT_USER_SPOTS";
+const EDIT_SINGLE_SPOT = "spots/PUT_SINGLE_SPOT";
+const DELETE_SINGLE_SPOT = "spots/DELETE_SINGLE_SPOT";
 
 /* ------- ACTIONS ------- */
 const getAllSpotsAction = (spots) => {
@@ -34,6 +37,27 @@ const postNewSpotImageAction = (image) => {
   };
 };
 
+const getCurrentUserSpotsAction = (spots) => {
+  return {
+    type: GET_CURRENT_USER_SPOTS,
+    spots,
+  };
+};
+
+const editSpotAction = (spot) => {
+  return {
+    type: EDIT_SINGLE_SPOT,
+    spot,
+  };
+};
+
+const deleteSpotAction = (spotId) => {
+  return {
+    type: DELETE_SINGLE_SPOT,
+    spotId,
+  };
+};
+
 /* ------- THUNKS ------- */
 
 // Display all spots at root page
@@ -53,6 +77,7 @@ export const getSingleSpotThunk = (spotId) => async (dispatch) => {
     const singleSpot = await res.json();
     // console.log("thunk singleSpot", singleSpot);
     dispatch(getSingleSpotAction(singleSpot));
+    return singleSpot;
   }
 };
 
@@ -87,6 +112,45 @@ export const postNewSpotImageThunk = (image, spotId) => async (dispatch) => {
     // console.log("RES.OK NEW SPOT IMAGE", newSpotImage);
     dispatch(postNewSpotImageAction(newSpotImage));
     return newSpotImage;
+  }
+};
+
+// Get current user's spots
+export const getCurrentUserSpotsThunk = () => async (dispatch) => {
+  const res = await csrfFetch("/api/spots/current");
+  if (res.ok) {
+    const currentUserSpots = await res.json();
+    // console.log("CURRENT USER SPOTS THUNK", currentUserSpots);
+    dispatch(getCurrentUserSpotsAction(currentUserSpots));
+  }
+};
+
+// Edit a single spot
+export const editSpotThunk = (spot, spotId) => async (dispatch) => {
+  const res = await csrfFetch(`/api/spots/${spotId}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(spot),
+  });
+
+  if (res.ok) {
+    const editedSpot = await res.json();
+    // console.log("thunk editedSpot", editedSpot);
+    dispatch(editSpotAction(editedSpot));
+    return editedSpot;
+  }
+};
+
+// Delete a single spot
+export const deleteSpotThunk = (spotId) => async (dispatch) => {
+  const res = await csrfFetch(`/api/spots/${spotId}`, {
+    method: "DELETE",
+  });
+
+  if (res.ok) {
+    // res from backend is message deleted + 200 status
+    dispatch(deleteSpotAction(spotId));
+    dispatch(getCurrentUserSpotsThunk())
   }
 };
 
@@ -129,6 +193,14 @@ const spotsReducer = (state = initialState, action) => {
     // Updating former spot - separate feature
     // reference pokedex
     case POST_NEW_IMAGE:
+      return { ...newState };
+    case GET_CURRENT_USER_SPOTS:
+      // action.spots.Spots.forEach((spot) => (currentUserSpots[spot.id] = spot));
+      return { ...newState, currentUserSpots: action.spots };
+    case EDIT_SINGLE_SPOT:
+      return { ...newState };
+    case DELETE_SINGLE_SPOT:
+      delete newState.currentUserSpots[action.spotId];
       return { ...newState };
     default:
       return state;
