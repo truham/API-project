@@ -1,0 +1,66 @@
+.review-form-modal-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.review-form-modal {
+  display: flex;
+  flex-direction: column;
+  height: 300px;
+  width: 320px;
+}
+
+.review-form-header {
+  display: flex;
+  justify-content: center;
+}
+
+.review-form-textarea-container {
+  display: flex;
+  justify-content: center;
+}
+
+.review-form-textarea {
+  width: 88%;
+  height: 150px;
+  border: 2px solid black;
+  background-color: #e7f0fe;
+}
+
+.review-form-stars-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.review-form-button-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.review-form-submit-button {
+  background-color: #ff5a5e;
+  color: white;
+  margin: 10px 0px;
+  height: 40px;
+  cursor: pointer;
+  width: 90%;
+  border: 2px solid black;
+  box-shadow: 3px 3px black;
+}
+
+.review-form-submit-button-disabled {
+  background-color: white;
+  color: gray;
+  margin: 10px 0px;
+  height: 40px;
+  width: 93%;
+  border: gray solid 2px;
+  box-shadow: 3px 3px gray;
+}

@@ -115,17 +115,19 @@ const spotsReducer = (state = initialState, action) => {
     case POST_NEW_SPOT:
       // Creating new spot
       const newSpotId = action.spot.id;
-      if (!newState.allSpots[newSpotId]) {
-        // console.log("INSIDE CONDITION");
-        // console.log("before", newState.allSpots);
-        // update state's allSpot key to include all former spots then add new spot
-        newState.allSpots = { ...state.allSpots, [newSpotId]: action.spot };
-        // console.log("after", newState.allSpots);
-        return newState;
-      }
-      // Updating former spot - separate feature
-      // reference pokedex
+      newState.allSpots = { ...state.allSpots, [newSpotId]: action.spot };
       return { ...newState };
+    // // Per Daniel - don't reference pokedex for any reducer content
+    // if (!newState.allSpots[newSpotId]) {
+    //   // console.log("INSIDE CONDITION");
+    //   // console.log("before", newState.allSpots);
+    //   // update state's allSpot key to include all former spots then add new spot
+    //   newState.allSpots = { ...state.allSpots, [newSpotId]: action.spot };
+    //   // console.log("after", newState.allSpots);
+    //   return newState;
+    // }
+    // Updating former spot - separate feature
+    // reference pokedex
     case POST_NEW_IMAGE:
       return { ...newState };
     default:

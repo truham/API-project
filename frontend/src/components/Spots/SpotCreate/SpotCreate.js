@@ -55,9 +55,9 @@ const PostNewSpot = () => {
     // helper fxn to check url match
     const checkImageURL = (imageURL) => {
       return (
-        !imageURL.endsWith("png") &&
-        !imageURL.endsWith("jpg") &&
-        !imageURL.endsWith("jpeg")
+        !imageURL.endsWith(".png") &&
+        !imageURL.endsWith(".jpg") &&
+        !imageURL.endsWith(".jpeg")
       );
     };
 
@@ -130,19 +130,19 @@ const PostNewSpot = () => {
 
     // optional images
     if (image2)
-      dispatch(
+      await dispatch(
         postNewSpotImageThunk({ url: image2, preview: false }, createdSpotId)
       );
     if (image3)
-      dispatch(
+      await dispatch(
         postNewSpotImageThunk({ url: image3, preview: false }, createdSpotId)
       );
     if (image4)
-      dispatch(
+      await dispatch(
         postNewSpotImageThunk({ url: image4, preview: false }, createdSpotId)
       );
     if (image5)
-      dispatch(
+      await dispatch(
         postNewSpotImageThunk({ url: image5, preview: false }, createdSpotId)
       );
 
