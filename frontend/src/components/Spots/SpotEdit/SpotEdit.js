@@ -50,12 +50,21 @@ const SpotEdit = () => {
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [errors, setErrors] = useState({});
 
+  // redirect non-logged in users
+  const currentUser = useSelector((state) => state.session.user);
+  if (!currentUser) history.push("/");
+
   // grab data for spot from backend
   useEffect(() => {
     dispatch(getSingleSpotThunk(spotId));
 
     const restoreInput = async () => {
       let restoreSpot = await dispatch(getSingleSpotThunk(spotId));
+
+      // if currentUser does not own spot, then redirect to home
+      // need the singleSpot restored before can check the condition
+      if (restoreSpot.ownerId !== currentUser.id) history.push("/");
+
       setCountry(restoreSpot.country);
       setAddress(restoreSpot.address);
       setCity(restoreSpot.city);
