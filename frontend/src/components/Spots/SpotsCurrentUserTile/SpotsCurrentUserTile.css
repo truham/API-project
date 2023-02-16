@@ -1,0 +1,25 @@
+.current-tile-price-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.buttons-update-delete-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.buttons-update-delete {
+  background-color: #999999;
+  color: white;
+  width: 60px;
+  cursor: pointer;
+  border: black solid 2px;
+  box-shadow: 2px 2px black;
+  list-style-type: none;
+  padding: 1px 0px;
+}
+
+.update-button {
+  margin-right: 10px;
+}

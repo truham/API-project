@@ -122,7 +122,8 @@ const SpotDetails = () => {
           <div className="single-spot-callout-container">
             <div className="price-reviews-container">
               <div>
-                <p>{`$${spot.price} night`}</p>
+                <span className="tile-price">{`$${spot.price}`}</span>
+                <span>{` night`}</span>
               </div>
               <div className="stars-reviews">
                 <i className="fa-solid fa-star"></i>

@@ -48,7 +48,7 @@ export const postNewReviewThunk = (review, spotId, user) => async (dispatch) => 
 
   if (res.ok) {
     const newReview = await res.json();
-    console.log("NEW REVIEW RES", newReview);
+    // console.log("NEW REVIEW RES", newReview);
     newReview.User = user
     dispatch(postNewReviewAction(newReview));
     return newReview;

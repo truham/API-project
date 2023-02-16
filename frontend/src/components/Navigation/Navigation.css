@@ -72,6 +72,16 @@ ul {
   background-color: white;
 }
 
+.profile-dropdown > hr {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.menu-manage-spots {
+  text-decoration: none;
+  color: black;
+}
+
 /* style logout button when logged in */
 .button-logout {
   height: 40px;

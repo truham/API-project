@@ -1,0 +1,31 @@
+.currentspots-container {
+  display: flex;
+  /* align-items: center; */
+  /* justify-content: center; */
+  /* flex-direction: column; */
+  padding-left: 20px;
+  padding-right: 20px;
+  max-width: 1080px;
+}
+
+/* .currentspots-content {
+} */
+
+.currentspots-tiles-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.currentspots-create-button {
+  background-color: #999999;
+  color: white;
+  width: 140px;
+  cursor: pointer;
+  border: black solid 2px;
+  box-shadow: 3px 3px black;
+  margin-bottom: 15px;
+  padding: 3px 10px;
+  list-style-type: none;
+}
