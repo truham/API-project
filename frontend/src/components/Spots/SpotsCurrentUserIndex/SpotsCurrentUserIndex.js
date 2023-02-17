@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 import { getCurrentUserSpotsThunk } from "../../../store/spots";
 
 import "./SpotsCurrentUserIndex.css";
@@ -9,7 +10,12 @@ import { NavLink } from "react-router-dom";
 
 const SpotsCurrentUserIndex = () => {
   const dispatch = useDispatch();
+  const history = useHistory();
   const currentSpotsList = useSelector((state) => state.spots.currentUserSpots);
+  
+  // bug post grading - needed to reroute non-logged in users
+  const currentUser = useSelector((state) => state.session.user);
+  if (!currentUser) history.push("/");
 
   // grab all of current user's spots
   useEffect(() => {
