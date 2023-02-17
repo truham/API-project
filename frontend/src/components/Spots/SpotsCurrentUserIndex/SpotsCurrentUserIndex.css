@@ -10,7 +10,10 @@
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: flex-start;
-  max-width: 1216px;
+}
+
+.currentspots-content {
+  width: 1216px;
 }
 
 .currentspots-create-button {
@@ -23,4 +26,9 @@
   margin-bottom: 15px;
   padding: 3px 10px;
   list-style-type: none;
+}
+
+.currentspots-content > h3,
+.currentspots-create-button {
+  margin-left: 5px;
 }
