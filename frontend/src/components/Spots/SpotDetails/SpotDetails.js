@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import { getSingleSpotThunk } from "../../../store/spots";
-import { getSpotsReviewsThunk } from "../../../store/reviews";
 
 // Create New Review Modal + Form
 import OpenModalMenuItem from "../../Navigation/OpenModalMenuItem";
@@ -29,7 +28,7 @@ const SpotDetails = () => {
   useEffect(() => {
     dispatch(getSingleSpotThunk(spotId)).then(() => setIsLoaded(true));
     // dispatch(getSpotsReviewsThunk(spotId)).then(() => setIsLoaded(true)); // moved into store getSingleSpotThunk
-  }, [dispatch]);
+  }, [spotId, dispatch]);
 
   // --------------- Spot's Ratings & Reviews Feature ---------------
   const reviewsList = useSelector((state) => state.reviews.spot);
@@ -108,12 +107,17 @@ const SpotDetails = () => {
 
             {/* Images */}
             <div className="spot-details-images-container">
-              <img className="single-spot-image" src={previewImage.url} />
+              <img
+                className="single-spot-image"
+                src={previewImage.url}
+                alt="preview-pic"
+              />
               <div className="extra-spot-images-container">
-                {extraImages.map((image) => (
+                {extraImages.map((image, idx) => (
                   <img
-                    key={image.url}
+                    key={idx}
                     className="single-spot-extra-images"
+                    alt={`extra-pic-${idx}`}
                     src={image.url}
                   ></img>
                 ))}
