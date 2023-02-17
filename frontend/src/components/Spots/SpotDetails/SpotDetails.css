@@ -15,20 +15,28 @@
 
 .single-spot-image {
   height: 412px;
-  max-width: 100%;
-  flex-basis: auto;
+  min-width: 50%;
+  /* flex-basis: auto; */
   object-fit: cover;
   /* width: 50%; */
 }
 
 .single-spot-extra-images {
-  height: 412px;
+  /* height: 412px; */
+  max-width: 25%;
+  max-height: 25%;
+  object-fit: cover;
 }
 
 .single-spot-info-container {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
+}
+
+.single-spot-info-text {
+  max-width: 70%;
+  margin-right: 10px;
 }
 
 .single-spot-callout-container {

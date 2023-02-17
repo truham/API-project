@@ -1,6 +1,16 @@
+.spots-tiles-outer-outer {
+  display: flex;
+  /* flex-direction: column; */
+  align-items: center;
+  justify-content: center;
+  /* align-content: center; */
+}
+
 .spots-tiles-container {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: center;
+  /* width: 100vw; */
+  /* justify-content: center; */
+  max-width: 1400px;
 }

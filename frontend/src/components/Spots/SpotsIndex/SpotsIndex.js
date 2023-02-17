@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getAllSpotsThunk } from "../../../store/spots";
 
@@ -13,19 +13,30 @@ const SpotsIndex = () => {
   const allSpots = Object.values(allSpotsList.allSpots);
   // console.log(allSpots);
 
+  // from app => navigation
+  const [isLoaded, setIsLoaded] = useState(false);
+
   // grabs all the spots from redux on initial render
   useEffect(() => {
-    dispatch(getAllSpotsThunk());
+    dispatch(getAllSpotsThunk()).then(() => setIsLoaded(true));
   }, [dispatch]);
 
   return (
-    <div>
-      <div className="spots-tiles-container">
-        {allSpots.map((spot) => (
-          <SpotsIndexTile spot={spot} key={spot.id} />
-        ))}
-      </div>
-    </div>
+    <>
+      {isLoaded ? (
+        <div className="spots-tile-outer-outer">
+          <div className="spots-tiles-container-centering">
+            <div className="spots-tiles-container">
+              {allSpots.map((spot) => (
+                <SpotsIndexTile spot={spot} key={spot.id} />
+              ))}
+            </div>
+          </div>
+        </div>
+      ) : (
+        <h3>Unable to retrieve spots. Please try again shortly.</h3>
+      )}
+    </>
   );
 };
 

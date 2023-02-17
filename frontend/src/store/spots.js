@@ -1,5 +1,7 @@
 import { csrfFetch } from "./csrf";
 
+import { getSpotsReviewsThunk } from "./reviews";
+
 const GET_ALL_SPOTS = "spots/GET_ALL_SPOTS";
 const GET_SINGLE_SPOT = "spots/GET_SINGLE_SPOT";
 const POST_NEW_SPOT = "spots/POST_NEW_SPOT";
@@ -77,6 +79,7 @@ export const getSingleSpotThunk = (spotId) => async (dispatch) => {
     const singleSpot = await res.json();
     // console.log("thunk singleSpot", singleSpot);
     dispatch(getSingleSpotAction(singleSpot));
+    dispatch(getSpotsReviewsThunk(spotId))
     return singleSpot;
   }
 };
@@ -150,7 +153,7 @@ export const deleteSpotThunk = (spotId) => async (dispatch) => {
   if (res.ok) {
     // res from backend is message deleted + 200 status
     dispatch(deleteSpotAction(spotId));
-    dispatch(getCurrentUserSpotsThunk())
+    dispatch(getCurrentUserSpotsThunk());
   }
 };
 

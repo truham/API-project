@@ -257,6 +257,7 @@ const PostNewSpot = () => {
             fast wifi or parking, and what you love about the neighborhood.
           </p>
           <textarea
+            className="create-spot-description"
             type="textarea"
             placeholder="Please write at least 30 characters"
             value={description}
@@ -274,6 +275,7 @@ const PostNewSpot = () => {
             your place special.
           </p>
           <input
+            className="create-spot-name"
             type="text"
             placeholder="Name of your spot"
             value={name}
@@ -288,13 +290,16 @@ const PostNewSpot = () => {
             Competitive pricing can help your listing stand out and rank higher
             in search results.
           </p>
-          <span>$</span>
-          <input
-            type="number"
-            placeholder="Price per night (USD)"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
-          ></input>
+          <div className="create-spot-price-container">
+            <span className="create-spot-dollar-sign">{`$`}</span>
+            <input
+              className="create-spot-price"
+              type="number"
+              placeholder="Price per night (USD)"
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
+            ></input>
+          </div>
           <p className="create-spot-errors">{hasSubmitted && errors.price}</p>
         </div>
         <hr className="create-spot-hz-line"></hr>

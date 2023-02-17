@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import { getSingleSpotThunk } from "../../../store/spots";
@@ -22,9 +22,13 @@ const SpotDetails = () => {
   // grab the singleSpot from state for react usage
   const spot = useSelector((state) => state.spots.singleSpot);
 
+  // from app => navigation
+  const [isLoaded, setIsLoaded] = useState(false);
+
   // grabs single spot details from redux
   useEffect(() => {
-    dispatch(getSingleSpotThunk(spotId));
+    dispatch(getSingleSpotThunk(spotId)).then(() => setIsLoaded(true));
+    // dispatch(getSpotsReviewsThunk(spotId)).then(() => setIsLoaded(true)); // moved into store getSingleSpotThunk
   }, [dispatch]);
 
   // --------------- Spot's Ratings & Reviews Feature ---------------
@@ -32,9 +36,7 @@ const SpotDetails = () => {
   const reviews = Object.values(reviewsList);
   // console.log("reviews", reviews);
 
-  useEffect(() => {
-    dispatch(getSpotsReviewsThunk(spotId));
-  }, [dispatch]);
+  // useEffect(() => {}, [dispatch]);
 
   // --------------- Current User Reviewed? ---------------
   // check if user is logged in
@@ -92,45 +94,74 @@ const SpotDetails = () => {
   );
 
   return (
-    <div className="single-spot-outer">
-      <div className="single-spot-container">
-        {/* Heading */}
-        <div>
-          <h3>{spot.name}</h3>
-          <p className="single-spot-heading">
-            {spot.city}, {spot.state}, {spot.country}
-          </p>
-        </div>
+    <>
+      {isLoaded ? (
+        <div className="single-spot-outer">
+          <div className="single-spot-container">
+            {/* Heading */}
+            <div>
+              <h3>{spot.name}</h3>
+              <p className="single-spot-heading">
+                {spot.city}, {spot.state}, {spot.country}
+              </p>
+            </div>
 
-        {/* Images */}
-        <div>
-          <img className="single-spot-image" src={previewImage.url} />
-          {extraImages.map((image) => (
-            <img
-              key={image.url}
-              className="single-spot-extra-images"
-              src={image.url}
-            ></img>
-          ))}
-        </div>
+            {/* Images */}
+            <div>
+              <img className="single-spot-image" src={previewImage.url} />
+              {extraImages.map((image) => (
+                <img
+                  key={image.url}
+                  className="single-spot-extra-images"
+                  src={image.url}
+                ></img>
+              ))}
+            </div>
 
-        <div className="single-spot-info-container">
-          {/* Text */}
-          <div>
-            <h3>{`Hosted by ${spot.Owner.firstName} ${spot.Owner.lastName}`}</h3>
-            <p>{`${spot.description}`}</p>
-          </div>
-
-          {/* Callout box */}
-          <div className="single-spot-callout-container">
-            <div className="price-reviews-container">
-              <div>
-                <span className="tile-price">{`$${Number(spot.price).toFixed(
-                  2
-                )}`}</span>
-                <span>{` night`}</span>
+            <div className="single-spot-info-container">
+              {/* Text */}
+              <div className="single-spot-info-text">
+                <h3>{`Hosted by ${spot.Owner.firstName} ${spot.Owner.lastName}`}</h3>
+                <p>{`${spot.description}`}</p>
               </div>
-              <div className="stars-reviews">
+
+              {/* Callout box */}
+              <div className="single-spot-callout-container">
+                <div className="price-reviews-container">
+                  <div>
+                    <span className="tile-price">{`$${Number(
+                      spot.price
+                    ).toFixed(2)}`}</span>
+                    <span>{` night`}</span>
+                  </div>
+                  <div className="stars-reviews">
+                    <i className="fa-solid fa-star"></i>
+                    <p>{`${
+                      Number(spot.avgStarRating)
+                        ? `${spot.avgStarRating} · ${spot.numReviews} ${
+                            Number(spot.numReviews) === 1 ? "review" : "reviews"
+                          }`
+                        : "New"
+                    }`}</p>
+                  </div>
+                </div>
+                <div>
+                  <button
+                    className="reserve-button"
+                    onClick={() => alert("Feature coming soon")}
+                  >
+                    Register
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <hr className="hz-line"></hr>
+
+            {/* Ratings & Reviews Feature */}
+            <div className="ratings-reviews-container">
+              {/* R&R Heading */}
+              <div className="ratings-reviews-heading">
                 <i className="fa-solid fa-star"></i>
                 <p>{`${
                   Number(spot.avgStarRating)
@@ -140,76 +171,55 @@ const SpotDetails = () => {
                     : "New"
                 }`}</p>
               </div>
-            </div>
-            <div>
-              <button
-                className="reserve-button"
-                onClick={() => alert("Feature coming soon")}
-              >
-                Reserve
-              </button>
-            </div>
-          </div>
-        </div>
 
-        <hr className="hz-line"></hr>
+              {/* Create Review Button for Session User */}
+              {sessionUser && !sessionUserOwned && !sessionUserReview && (
+                <button className="post-your-review-button">
+                  <OpenModalMenuItem
+                    itemText="Post Your Review"
+                    modalComponent={<ReviewFormModal />}
+                  />
+                </button>
+              )}
 
-        {/* Ratings & Reviews Feature */}
-        <div className="ratings-reviews-container">
-          {/* R&R Heading */}
-          <div className="ratings-reviews-heading">
-            <i className="fa-solid fa-star"></i>
-            <p>{`${
-              Number(spot.avgStarRating)
-                ? `${spot.avgStarRating} · ${spot.numReviews} ${
-                    Number(spot.numReviews) === 1 ? "review" : "reviews"
-                  }`
-                : "New"
-            }`}</p>
-          </div>
-
-          {/* Create Review Button for Session User */}
-          {sessionUser && !sessionUserOwned && !sessionUserReview && (
-            <button className="post-your-review-button">
-              <OpenModalMenuItem
-                itemText="Post Your Review"
-                modalComponent={<ReviewFormModal />}
-              />
-            </button>
-          )}
-
-          {/* List of Reviews */}
-          <div>
-            <ul>
-              {reviews.length
-                ? reviews.map((review) => (
-                    <li key={review.id}>
-                      <p>{review.User.firstName}</p>
-                      <p>{dateCreator(review.createdAt)}</p>
-                      <p>{review.review}</p>
-                      {/* Populate review delete for logged in users */}
-                      {review.userId === sessionUser?.id && (
-                        <button className="spot-delete-review-button">
-                          <OpenModalMenuItem
-                            itemText="Delete"
-                            modalComponent={
-                              <ReviewDeleteModal
-                                reviewId={review.id}
-                                spotId={spotId}
+              {/* List of Reviews */}
+              <div>
+                <ul>
+                  {reviews.length
+                    ? reviews.map((review) => (
+                        <li key={review.id}>
+                          <p>{review.User.firstName}</p>
+                          <p>{dateCreator(review.createdAt)}</p>
+                          <p>{review.review}</p>
+                          {/* Populate review delete for logged in users */}
+                          {review.userId === sessionUser?.id && (
+                            <button className="spot-delete-review-button">
+                              <OpenModalMenuItem
+                                itemText="Delete"
+                                modalComponent={
+                                  <ReviewDeleteModal
+                                    reviewId={review.id}
+                                    spotId={spotId}
+                                  />
+                                }
                               />
-                            }
-                          />
-                        </button>
-                      )}
-                      <br></br>
-                    </li>
-                  ))
-                : "Be the first to post a review!"}
-            </ul>
+                            </button>
+                          )}
+                          <br></br>
+                        </li>
+                      ))
+                    : sessionUser
+                    ? "Be the first to post a review!"
+                    : ""}
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
+      ) : (
+        <h3>Unable to retrieve details. Please try again shortly.</h3>
+      )}
+    </>
   );
 };
 

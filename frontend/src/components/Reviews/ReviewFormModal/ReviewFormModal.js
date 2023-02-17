@@ -22,8 +22,10 @@ function ReviewFormModal() {
 
   // Form input values
   const [review, setReview] = useState("");
-  const [stars, setStars] = useState(4);
-  // manually set to 4 to test disable, reset to 0 once stars are working
+
+  // star rating hover
+  const [stars, setStars] = useState(0);
+  const [hover, setHover] = useState(0);
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -42,8 +44,6 @@ function ReviewFormModal() {
 
   const submitReviewDisabled = review.length < 10 || stars === 0;
 
-  const [hover, setHover] = useState(0);
-
   return (
     <>
       <div className="review-form-modal-container">
@@ -51,7 +51,7 @@ function ReviewFormModal() {
           <h3 className="review-form-header">How was your stay?</h3>
           <div className="review-form-textarea-container">
             <textarea
-              placeholder="Just a quick review."
+              placeholder="Leave your review here..."
               className="review-form-textarea"
               value={review}
               onChange={(e) => setReview(e.target.value)}
@@ -60,24 +60,22 @@ function ReviewFormModal() {
           <div className="review-form-stars-container">
             {/* Each star value 1-5
             On hover/click, set stars value to appropriate number */}
-
-            <span className="star">
-              <i className="fa-regular fa-star"></i>
-            </span>
-            <span className="star">
-              <i className="fa-regular fa-star"></i>
-            </span>
-            <span className="star">
-              <i className="fa-regular fa-star"></i>
-            </span>
-            <span className="star">
-              <i className="fa-regular fa-star"></i>
-            </span>
-            <span className="star">
-              <i className="fa-regular fa-star"></i>
-            </span>
-
-            <span>Stars</span>
+            {[...Array(5)].map((star, index) => {
+              index += 1;
+              return (
+                <button
+                  type="button"
+                  key={index}
+                  className={index <= (hover || stars) ? "on" : "off"}
+                  onClick={() => setStars(index)}
+                  onMouseEnter={() => setHover(index)}
+                  onMouseLeave={() => setHover(stars)}
+                >
+                  <span className="star-rating">&#9733;</span>
+                </button>
+              );
+            })}
+            <span>{` Stars`}</span>
           </div>
           <div className="review-form-button-container">
             <button
