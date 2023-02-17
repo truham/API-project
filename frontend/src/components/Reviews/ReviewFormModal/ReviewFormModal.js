@@ -9,6 +9,7 @@ function ReviewFormModal() {
   const dispatch = useDispatch();
   const history = useHistory();
   const { closeModal } = useModal();
+  const [errors, setErrors] = useState([]);
 
   // Grab spotId information from state
   const spotId = useSelector((state) => state.spots.singleSpot.id);
@@ -35,11 +36,16 @@ function ReviewFormModal() {
       stars,
     };
 
-    dispatch(postNewReviewThunk(newReview, spotId, currentUser)).then(
-      closeModal
-    );
+    dispatch(postNewReviewThunk(newReview, spotId, currentUser))
+      .then(closeModal)
+      // catch server error from backend
+      .catch(async (res) => {
+        const data = await res.json();
+        if (data && data.errors) setErrors(data.errors);
+      });
 
-    history.push(`/spots/${spotId}`);
+    // need server error above, history push is redundant here
+    // history.push(`/spots/${spotId}`);
   };
 
   const submitReviewDisabled = review.length < 10 || stars === 0;
@@ -49,6 +55,13 @@ function ReviewFormModal() {
       <div className="review-form-modal-container">
         <form className="review-form-modal" onSubmit={onSubmit}>
           <h3 className="review-form-header">How was your stay?</h3>
+          <ul>
+            {errors.map((error, idx) => (
+              <li className="review-form-errors" key={idx}>
+                {error}
+              </li>
+            ))}
+          </ul>
           <div className="review-form-textarea-container">
             <textarea
               placeholder="Leave your review here..."
