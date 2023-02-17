@@ -236,7 +236,7 @@ const SpotEdit = () => {
   if (!spot) return;
 
   return (
-    <div>
+    <div className="create-spot-form-outer">
       <form className="create-spot-form" onSubmit={onSubmit}>
         <h3>Update your Spot</h3>
         <h4>Where is your place located?</h4>

@@ -107,15 +107,17 @@ const SpotDetails = () => {
             </div>
 
             {/* Images */}
-            <div>
+            <div className="spot-details-images-container">
               <img className="single-spot-image" src={previewImage.url} />
-              {extraImages.map((image) => (
-                <img
-                  key={image.url}
-                  className="single-spot-extra-images"
-                  src={image.url}
-                ></img>
-              ))}
+              <div className="extra-spot-images-container">
+                {extraImages.map((image) => (
+                  <img
+                    key={image.url}
+                    className="single-spot-extra-images"
+                    src={image.url}
+                  ></img>
+                ))}
+              </div>
             </div>
 
             <div className="single-spot-info-container">

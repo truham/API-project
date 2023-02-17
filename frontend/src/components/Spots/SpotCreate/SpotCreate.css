@@ -1,8 +1,15 @@
+.create-spot-form-outer {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
 .create-spot-form {
   display: flex;
   flex-direction: column;
-  padding-left: 10vw;
-  padding-right: 10vw;
+  /* padding-left: 10vw; */
+  /* padding-right: 10vw; */
   width: 500px;
 }
 

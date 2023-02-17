@@ -25,12 +25,10 @@ const SpotsIndex = () => {
     <>
       {isLoaded ? (
         <div className="spots-tile-outer-outer">
-          <div className="spots-tiles-container-centering">
-            <div className="spots-tiles-container">
-              {allSpots.map((spot) => (
-                <SpotsIndexTile spot={spot} key={spot.id} />
-              ))}
-            </div>
+          <div className="spots-tiles-container">
+            {allSpots.map((spot) => (
+              <SpotsIndexTile spot={spot} key={spot.id} />
+            ))}
           </div>
         </div>
       ) : (
