@@ -236,7 +236,7 @@ const SpotEdit = () => {
   if (!spot) return;
 
   return (
-    <div>
+    <div className="create-spot-form-outer">
       <form className="create-spot-form" onSubmit={onSubmit}>
         <h3>Update your Spot</h3>
         <h4>Where is your place located?</h4>
@@ -340,6 +340,7 @@ const SpotEdit = () => {
             fast wifi or parking, and what you love about the neighborhood.
           </p>
           <textarea
+            className="create-spot-description"
             type="textarea"
             placeholder="Please write at least 30 characters"
             value={description}
@@ -357,6 +358,7 @@ const SpotEdit = () => {
             your place special.
           </p>
           <input
+            className="create-spot-name"
             type="text"
             placeholder="Name of your spot"
             value={name}
@@ -371,13 +373,16 @@ const SpotEdit = () => {
             Competitive pricing can help your listing stand out and rank higher
             in search results.
           </p>
-          <span>$</span>
-          <input
-            type="number"
-            placeholder="Price per night (USD)"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
-          ></input>
+          <div className="create-spot-price-container">
+            <span className="create-spot-dollar-sign">{`$`}</span>
+            <input
+              className="create-spot-price"
+              type="number"
+              placeholder="Price per night (USD)"
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
+            ></input>
+          </div>
           <p className="create-spot-errors">{hasSubmitted && errors.price}</p>
         </div>
         <hr className="create-spot-hz-line"></hr>
@@ -431,7 +436,7 @@ const SpotEdit = () => {
         {/* <hr className="create-spot-hz-line"></hr> */}
         <div className="create-spot-button-container">
           <button className="create-spot-submit-button" type="submit">
-            Update Spot
+            Update your Spot
           </button>
         </div>
       </form>

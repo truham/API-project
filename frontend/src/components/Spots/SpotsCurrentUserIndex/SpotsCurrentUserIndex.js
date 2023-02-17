@@ -21,7 +21,7 @@ const SpotsCurrentUserIndex = () => {
   return (
     <div className="currentspots-container">
       <div className="currentspots-content">
-        <h3>Manage Your Spots</h3>
+        <h3>Manage Spots</h3>
         <NavLink exact to="/spots/new">
           <button className="currentspots-create-button">
             Create a New Spot

@@ -8,7 +8,7 @@ import SpotsDeleteModal from "../SpotsDeleteModal/SpotsDeleteModal";
 
 const SpotsCurrentUserTile = ({ spot }) => {
   return (
-    <div className="tile-container">
+    <div className="tile-container-current">
       <Link className="tile-link" to={`/spots/${spot.id}`}>
         <img className="tile-img" src={spot.previewImage} />
         <div className="tile-text-content">
@@ -24,8 +24,8 @@ const SpotsCurrentUserTile = ({ spot }) => {
           </div>
         </div>
       </Link>
-      <div className="current-tile-price-container">
-        <div>
+      <div className="current-tile-price-buttons-outer">
+        <div className="current-tile-price-container">
           <Link className="tile-link" to={`/spots/${spot.id}`}>
             <span className="tile-price">{`$${Number(spot.price).toFixed(
               2

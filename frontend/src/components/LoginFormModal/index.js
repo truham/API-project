@@ -84,7 +84,7 @@ function LoginFormModal() {
             className="login-demo-user"
             type="submit"
           >
-            Demo User
+            Log in as Demo User
           </button>
         </form>
       </div>
