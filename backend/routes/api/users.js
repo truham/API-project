@@ -38,6 +38,9 @@ router.post("/", validateSignup, async (req, res) => {
 
   // custom err res for user already exists with specified email
   // condition to find whether email has been used in db already
+
+  const errors = [];
+
   if (
     await User.findOne({
       where: {
@@ -45,12 +48,13 @@ router.post("/", validateSignup, async (req, res) => {
       },
     })
   ) {
-    res.status(403);
-    return res.json({
-      message: "User already exists",
-      statusCode: 403,
-      errors: ["User with that email already exists"],
-    });
+    errors.push("The provided email is invalid.");
+    // res.status(403);
+    // return res.json({
+    //   message: "User already exists",
+    //   statusCode: 403,
+    //   errors: ["User with that email already exists"],
+    // });
   }
 
   // custom err res for user already exists with specified email
@@ -62,11 +66,19 @@ router.post("/", validateSignup, async (req, res) => {
       },
     })
   ) {
+    // res.status(403);
+    // return res.json({
+    //   message: "User already exists",
+    //   statusCode: 403,
+    // errors: ["User with that username already exists"],
+    // });
+    errors.push("Username must be unique.");
+  }
+
+  if (errors.length) {
     res.status(403);
     return res.json({
-      message: "User already exists",
-      statusCode: 403,
-      errors: ["User with that username already exists"],
+      errors: errors,
     });
   }
 
