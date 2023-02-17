@@ -46,6 +46,7 @@
 .single-spot-info-text {
   max-width: 70%;
   margin-right: 10px;
+  overflow-wrap: break-word;
 }
 
 .single-spot-callout-container {
@@ -56,6 +57,7 @@
   border-radius: 15px;
   padding: 15px;
   margin-top: 10px;
+  max-height: 78px;
 }
 
 .price-reviews-container {
