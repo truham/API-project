@@ -88,6 +88,13 @@ const initialState = {
   user: {},
 };
 
+/* ------- SORTING ------- */
+const sortReviews = (reviews) => {
+  return reviews.sort((reviewA, reviewB) => {
+    return Date.parse(reviewB.updatedAt) - Date.parse(reviewA.updatedAt);
+  });
+};
+
 /* ------- REDUCER ------- */
 const reviewsReducer = (state = initialState, action) => {
   // copy state
@@ -96,9 +103,12 @@ const reviewsReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_SPOTS_REVIEWS:
       const spot = {};
-      // console.log("case spotsReviews", action.spotId.Reviews);
-      action.spotId.Reviews.forEach((review) => (spot[review.id] = review));
-      return { ...newState, spot: spot };
+      // original - no sorting
+      // action.spotId.Reviews.forEach((review) => (spot[review.id] = review));
+      // sorting reviews
+      const sortedReviews = sortReviews(action.spotId.Reviews);
+      sortedReviews.forEach((review) => (spot[Object.keys(review)] = review));
+      return { ...newState, spot: sortedReviews };
     case POST_NEW_REVIEW:
       newState.spot = { ...newState.spot, [action.review.id]: action.review };
       return { ...newState };
