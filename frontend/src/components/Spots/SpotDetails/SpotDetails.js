@@ -214,7 +214,7 @@ const SpotDetails = () => {
                           <br></br>
                         </li>
                       ))
-                    : sessionUser
+                    : sessionUser && !sessionUserOwned
                     ? "Be the first to post a review!"
                     : ""}
                 </ul>
