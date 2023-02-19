@@ -1,15 +1,14 @@
-# About Giburi:
+# About Giburi
 
 Giburi is a web application inspired by Airbnb. It provides an online marketplace for magical getaways from the world of Studio Ghibli. [Click here to visit Giburi's live site](https://ht-auth-me.onrender.com/).
 
 <br>
 
-# Wiki Links:
+# Wiki Links
 
-- Feature List
-- Database Schema
-- Frontend Routes
-- API Routes
+- [Feature List](https://github.com/truham/API-project/wiki/Feature-List)
+- [Database Schema](https://github.com/truham/API-project/wiki/Database-Schema)
+- [API Routes](https://github.com/truham/API-project/wiki/API-Routes)
 - [Redux Store State Shape](https://github.com/truham/API-project/wiki/Redux-Store-Shape)
 
 <br>
@@ -35,12 +34,26 @@ Database:
 
 # Features Directions
 
-## Home Page Demo User:
+## Home Page Demo User
 
 You will be able to test features without signing up by clicking on "Log in as Demo User".
 ![demo-user-features]
 
 [demo-user-features]: ./assets/demo-user-features.png
+
+## Create Spot as Logged-In User
+
+Logged-in users will be able to create a new spot.
+![create-spot-form]
+
+[create-spot-form]: ./assets/create-spot-form.png
+
+## Spot Details Viewing Available For Anyone
+
+Spot details can be accessed by anyone with additional features for logged in users, such as writing a review for someone else's spot.
+![spot-details]
+
+[spot-details]: ./assets/spot-details.png
 
 ## Roadmap
 
@@ -56,13 +69,39 @@ You will be able to test features without signing up by clicking on "Log in as D
     - <input type="checkbox" checked> Create spot images in new spot form
     - <input type="checkbox"> Create individual spot images
   - <input type="checkbox" checked> Read spot images
-  - <input type="checkbox"> Update  spot images
+  - <input type="checkbox"> Update spot images
   - <input type="checkbox"> Delete spot images
     - <input type="checkbox" checked> Delete spot images during spot deletion
     - <input type="checkbox"> Delete individual spot images
 - <input type="checkbox"> Bookings (CRUD)
 
-## Contact
+<br>
+
+# Get Started
+
+To run this project locally, please perform the following steps:
+
+1. Clone the repository
+   ```sh
+   git clone https://github.com/truham/API-project.git
+   ```
+2. Install npm packages at the root directory, and in both frontend and backend folders
+   ```sh
+   npm install
+   ```
+3. Create a local database file by running the following command in the backend folder
+   ```sh
+   npm run reset-db
+   ```
+4. Start both the frontend and backend servers by opening two terminals, one for each, and running the following command
+   ```sh
+   npm start
+   ```
+5. The localhost:3000 port will be available to view and interact with the application to test out the features.
+
+<br>
+
+# Contact
 
 Project Link: [https://github.com/truham/API-project](https://github.com/truham/API-project)
 
